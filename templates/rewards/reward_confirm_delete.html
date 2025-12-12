@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete {{ object.title }}{% endblock %}
+
+{% block content %}
+<h2>Delete Reward</h2>
+
+<p>Are you sure you want to delete the reward "<strong>{{ object.title }}</strong>"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn-danger">Delete</button>
+    <a href="{% url 'reward-detail' object.pk %}"><button type="button">Cancel</button></a>
+</form>
+{% endblock %}

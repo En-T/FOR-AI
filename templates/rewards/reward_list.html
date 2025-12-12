@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Rewards{% endblock %}
+
+{% block content %}
+<h2>Available Rewards</h2>
+
+<p>
+    <a href="{% url 'reward-add' %}"><button>Add New Reward</button></a>
+</p>
+
+{% if rewards %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Points Required</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reward in rewards %}
+                <tr>
+                    <td>{{ reward.title }}</td>
+                    <td>{{ reward.description }}</td>
+                    <td>{{ reward.points_required }}</td>
+                    <td>
+                        <a href="{% url 'reward-detail' reward.pk %}">View</a>
+                        <a href="{% url 'reward-update' reward.pk %}">Edit</a>
+                        <a href="{% url 'reward-delete' reward.pk %}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No rewards available.</p>
+{% endif %}
+{% endblock %}

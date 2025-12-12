@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Select Reward{% endblock %}
+
+{% block content %}
+<h2>Select a Reward</h2>
+
+{% if rewards %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="reward_id">Choose a reward:</label>
+        <select name="reward_id" id="reward_id" required>
+            <option value="">-- Select a reward --</option>
+            {% for reward in rewards %}
+                <option value="{{ reward.id }}">{{ reward.title }} ({{ reward.points_required }} points)</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Redeem Reward</button>
+        <a href="{% url 'rewarded-list' %}"><button type="button">Cancel</button></a>
+    </form>
+{% else %}
+    <p>No rewards available to redeem.</p>
+    <a href="{% url 'rewarded-list' %}"><button>Back</button></a>
+{% endif %}
+{% endblock %}

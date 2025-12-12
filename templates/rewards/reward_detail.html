@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ reward.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ reward.title }}</h2>
+
+<div class="list-item">
+    <p><strong>Description:</strong> {{ reward.description }}</p>
+    <p><strong>Points Required:</strong> {{ reward.points_required }}</p>
+    <p><strong>Created:</strong> {{ reward.created_at }}</p>
+</div>
+
+<p>
+    <a href="{% url 'reward-update' reward.pk %}"><button>Edit</button></a>
+    <a href="{% url 'reward-delete' reward.pk %}"><button class="btn-danger">Delete</button></a>
+    <a href="{% url 'reward-list' %}"><button>Back</button></a>
+</p>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Redeemed Rewards{% endblock %}
+
+{% block content %}
+<h2>Redeemed Rewards</h2>
+
+<p>
+    <a href="{% url 'rewarded-add' %}"><button>Add Rewarded</button></a>
+    <a href="{% url 'selection' %}"><button>Select Reward</button></a>
+</p>
+
+{% if rewarded_items %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Reward</th>
+                <th>Redeemed At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in rewarded_items %}
+                <tr>
+                    <td>{{ item.user.username }}</td>
+                    <td>{{ item.reward.title }}</td>
+                    <td>{{ item.redeemed_at }}</td>
+                    <td>
+                        <a href="{% url 'rewarded-detail' item.pk %}">View</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No redeemed rewards.</p>
+{% endif %}
+{% endblock %}
