@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Rewards</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Browse Available Rewards</h1>
+            <nav>
+                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'rewarded_list' %}">Rewarded Items</a>
+                <a href="{% url 'add_reward' %}">Add Reward</a>
+                <a href="{% url 'selection' %}">Browse Rewards</a>
+            </nav>
+        </header>
+
+        <main>
+            <h2>Available Rewards</h2>
+            
+            <div class="filter-form">
+                <form method="get">
+                    {{ filter.form.as_p }}
+                    <button type="submit">Filter</button>
+                    <a href="{% url 'selection' %}" class="btn-secondary">Clear</a>
+                </form>
+            </div>
+
+            <div class="rewards-grid">
+                {% if rewards %}
+                    {% for reward in rewards %}
+                        <div class="reward-card">
+                            <div class="reward-header">
+                                <h3>{{ reward.name }}</h3>
+                                <span class="points-badge">{{ reward.points_required }} pts</span>
+                            </div>
+                            <div class="reward-body">
+                                <p>{{ reward.description }}</p>
+                            </div>
+                            <div class="reward-footer">
+                                <span class="created-date">Added: {{ reward.created_at|date:"M d, Y" }}</span>
+                                <a href="{% url 'add_rewarded' %}?reward={{ reward.pk }}" class="btn-claim">Claim Reward</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-results">No active rewards available at this time.</p>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Rewards System. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

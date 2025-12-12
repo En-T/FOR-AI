@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Rewarded Item</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Delete Rewarded Item</h1>
+            <nav>
+                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'rewarded_list' %}">Rewarded Items</a>
+                <a href="{% url 'add_rewarded' %}">Add Rewarded</a>
+                <a href="{% url 'selection' %}">Browse Rewards</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="delete-container">
+                <div class="warning-box">
+                    <h2>⚠️ Confirm Deletion</h2>
+                    <p>Are you sure you want to delete the following rewarded item?</p>
+                    
+                    <div class="item-details">
+                        <h3>{{ rewarded.user_name }}</h3>
+                        <p><strong>Email:</strong> {{ rewarded.user_email }}</p>
+                        <p><strong>Reward:</strong> {{ rewarded.reward.name }}</p>
+                        <p><strong>Points Used:</strong> {{ rewarded.points_used }}</p>
+                        <p><strong>Status:</strong> {{ rewarded.get_status_display }}</p>
+                        <p><strong>Requested At:</strong> {{ rewarded.requested_at|date:"Y-m-d H:i" }}</p>
+                    </div>
+                    
+                    <p class="warning-text">This action cannot be undone.</p>
+                    
+                    <form method="post" class="delete-form">
+                        {% csrf_token %}
+                        <div class="form-actions">
+                            <button type="submit" class="btn-delete">Yes, Delete</button>
+                            <a href="{% url 'rewarded_list' %}" class="btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Rewards System. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

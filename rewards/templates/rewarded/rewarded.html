@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewarded Items</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Rewarded Items</h1>
+            <nav>
+                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'rewarded_list' %}">Rewarded Items</a>
+                <a href="{% url 'add_rewarded' %}">Add Rewarded</a>
+                <a href="{% url 'selection' %}">Browse Rewards</a>
+            </nav>
+        </header>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <main>
+            <h2>All Rewarded Items</h2>
+            
+            <div class="filter-form">
+                <form method="get">
+                    {{ filter.form.as_p }}
+                    <button type="submit">Filter</button>
+                    <a href="{% url 'rewarded_list' %}" class="btn-secondary">Clear</a>
+                </form>
+            </div>
+
+            <div class="rewarded-list">
+                {% if rewarded_items %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Email</th>
+                                <th>Reward</th>
+                                <th>Points Used</th>
+                                <th>Status</th>
+                                <th>Requested At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in rewarded_items %}
+                                <tr>
+                                    <td>{{ item.user_name }}</td>
+                                    <td>{{ item.user_email }}</td>
+                                    <td>{{ item.reward.name }}</td>
+                                    <td>{{ item.points_used }}</td>
+                                    <td>
+                                        <span class="badge status-{{ item.status }}">{{ item.get_status_display }}</span>
+                                    </td>
+                                    <td>{{ item.requested_at|date:"Y-m-d H:i" }}</td>
+                                    <td class="actions">
+                                        <a href="{% url 'edit_rewarded' item.pk %}" class="btn-edit">Edit</a>
+                                        <a href="{% url 'delete_rewarded' item.pk %}" class="btn-delete">Delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="no-results">No rewarded items found.</p>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Rewards System. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
