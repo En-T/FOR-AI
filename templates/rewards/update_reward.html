@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Update {{ reward.title }}{% endblock %}
+
+{% block content %}
+<h2>Update Reward</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Reward</button>
+    <a href="{% url 'reward-detail' reward.pk %}"><button type="button">Cancel</button></a>
+</form>
+{% endblock %}

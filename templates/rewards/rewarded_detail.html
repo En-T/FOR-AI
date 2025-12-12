@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Rewarded Detail{% endblock %}
+
+{% block content %}
+<h2>Rewarded Detail</h2>
+
+<div class="list-item">
+    <p><strong>User:</strong> {{ rewarded.user.username }}</p>
+    <p><strong>Reward:</strong> {{ rewarded.reward.title }}</p>
+    <p><strong>Redeemed At:</strong> {{ rewarded.redeemed_at }}</p>
+</div>
+
+<p>
+    <a href="{% url 'rewarded-list' %}"><button>Back</button></a>
+</p>
+{% endblock %}

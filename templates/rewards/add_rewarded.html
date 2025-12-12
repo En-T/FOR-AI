@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Rewarded{% endblock %}
+
+{% block content %}
+<h2>Add Rewarded</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create</button>
+    <a href="{% url 'rewarded-list' %}"><button type="button">Cancel</button></a>
+</form>
+{% endblock %}
