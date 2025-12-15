@@ -1,0 +1,193 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Education Dashboard - School Management System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-book"></i> Education Dashboard
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-download"></i> Export
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Welcome Message -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-success" role="alert">
+            <i class="bi bi-info-circle"></i>
+            <strong>Welcome, {{ user.first_name }}!</strong> 
+            You have education department access to the school management system.
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="card-title fs-4">{{ total_education_users }}</div>
+                        <div class="card-text">Education Users</div>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-people-fill" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="card-title fs-4">{{ admin_users }}</div>
+                        <div class="card-text">Admin Users</div>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-shield-check" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="card-title fs-4">{{ total_education_users|add:admin_users }}</div>
+                        <div class="card-text">Total Users</div>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-person-badge" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Education Resources -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h4><i class="bi bi-lightning"></i> Education Resources</h4>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-book-half text-success" style="font-size: 2rem;"></i>
+                        <h5 class="card-title mt-2">Course Management</h5>
+                        <p class="card-text">Manage courses and curricula</p>
+                        <button class="btn btn-success" disabled>
+                            <i class="bi bi-arrow-right"></i> Coming Soon
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people text-primary" style="font-size: 2rem;"></i>
+                        <h5 class="card-title mt-2">Student Records</h5>
+                        <p class="card-text">View and manage student information</p>
+                        <button class="btn btn-primary" disabled>
+                            <i class="bi bi-arrow-right"></i> Coming Soon
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-calendar3 text-warning" style="font-size: 2rem;"></i>
+                        <h5 class="card-title mt-2">Schedule</h5>
+                        <p class="card-text">View class schedules and timetables</p>
+                        <button class="btn btn-warning" disabled>
+                            <i class="bi bi-arrow-right"></i> Coming Soon
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h4><i class="bi bi-tools"></i> Quick Actions</h4>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h6><i class="bi bi-search"></i> Search Students</h6>
+                        <form>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter student ID or name">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h6><i class="bi bi-plus-circle"></i> Add Grade</h6>
+                        <p class="card-text">Quickly add or update student grades</p>
+                        <button class="btn btn-primary" disabled>
+                            <i class="bi bi-plus"></i> Add Grade
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Updates -->
+<div class="row">
+    <div class="col-12">
+        <h4><i class="bi bi-clock-history"></i> Recent Updates</h4>
+        <div class="card">
+            <div class="card-body">
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                    <p class="mt-2">No recent updates to display.</p>
+                    <p class="small">Updates will appear here as you work with student records and courses.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Access Control Notice -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="alert alert-info" role="alert">
+            <h6><i class="bi bi-shield-check"></i> Education Department Access</h6>
+            <p class="mb-0">
+                This dashboard is specifically designed for Education department users. 
+                Only users with the Education role can access this area. 
+                Administration users will be redirected to their own dashboard.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
