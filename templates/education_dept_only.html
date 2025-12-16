@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+    <h2>Education Department Features</h2>
+    <p>These features are restricted to <strong>Education Department</strong> users only.</p>
+    
+    <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; margin: 15px 0; border-radius: 5px;">
+        <h3>🔒 Access Granted</h3>
+        <p>You have successfully accessed education department-only features!</p>
+    </div>
+    
+    <h3>Available Education Department Tools</h3>
+    <ul>
+        <li><strong>District Performance Monitoring</strong> - View performance across all schools</li>
+        <li><strong>Policy Implementation Tracking</strong> - Monitor policy compliance across schools</li>
+        <li><strong>Budget Oversight</strong> - Review and approve budget allocations</li>
+        <li><strong>Curriculum Standards</strong> - Manage district-wide curriculum requirements</li>
+        <li><strong>Teacher Certification</strong> - Track teacher certification and professional development</li>
+        <li><strong>State Reporting</strong> - Generate reports for state education authorities</li>
+    </ul>
+    
+    <h3>Quick Actions</h3>
+    <p>
+        <a href="#" class="btn">View District Reports</a>
+        <a href="#" class="btn">Manage Policies</a>
+        <a href="#" class="btn">Budget Overview</a>
+    </p>
+    
+    <p><a href="{% url 'dashboard' %}" class="btn">Back to Dashboard</a></p>
+</div>
+{% endblock %}

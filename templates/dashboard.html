@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+    <h2>Dashboard</h2>
+    <p>Welcome to the Education System!</p>
+    
+    {% if user.is_school_admin %}
+        <p>You are logged in as a <strong>School Administrator</strong>.</p>
+        <h3>School Management Features</h3>
+        <ul>
+            <li>Manage classes and student enrollment</li>
+            <li>View student records and academic progress</li>
+            <li>Generate class schedules and reports</li>
+            <li>Access to restricted school administration features</li>
+        </ul>
+        <p><a href="{% url 'school_admin_only' %}" class="btn">Access School Admin Features</a></p>
+        
+    {% elif user.is_education_dept %}
+        <p>You are logged in as an <strong>Education Department</strong> user.</p>
+        <h3>Education Department Features</h3>
+        <ul>
+            <li>View school-wide performance metrics</li>
+            <li>Access department reports and analytics</li>
+            <li>Manage district-wide policies</li>
+            <li>Access to restricted education department features</li>
+        </ul>
+        <p><a href="{% url 'education_dept_only' %}" class="btn">Access Education Dept Features</a></p>
+        
+    {% else %}
+        <p>Welcome! Your role has not been properly configured.</p>
+    {% endif %}
+    
+    <h3>Available Actions</h3>
+    <ul>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+</div>
+{% endblock %}
