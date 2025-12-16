@@ -1,0 +1,6 @@
+# Auth Service Requirements
+-r ../../requirements/base.txt
+
+# Auth-specific dependencies
+PyJWT>=2.6.0
+django-allauth>=0.52.0
