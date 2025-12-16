@@ -1,0 +1,29 @@
+/* Placeholder stylesheet.
+   Replace with your project's CSS pipeline/build output as needed. */
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.site-header {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.site-title {
+  font-size: 1.25rem;
+  margin: 0;
+  padding: 1rem 0;
+}
+
+.site-title a {
+  color: inherit;
+  text-decoration: none;
+}
