@@ -1,0 +1,18 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Profile - Auth Service{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ user.username }}!</h2>
+
+<div class="info-box">
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Role:</strong> {{ user.get_role_display }}</p>
+    <p><strong>Staff Status:</strong> {% if user.is_staff %}Yes{% else %}No{% endif %}</p>
+    <p><strong>Date Joined:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'accounts:logout' %}" class="btn">Logout</a>
+</div>
+{% endblock %}
