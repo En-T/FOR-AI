@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+    <h2>School Administrator Dashboard</h2>
+    <p>Welcome, {{ user.get_full_name|default:user.username }}!</p>
+    
+    <p>As a <strong>School Administrator</strong>, you have access to all school management features:</p>
+    
+    <h3>Student Management</h3>
+    <ul>
+        <li>Enroll new students</li>
+        <li>Update student information</li>
+        <li>View student academic records</li>
+        <li>Generate student transcripts</li>
+    </ul>
+    
+    <h3>Class Management</h3>
+    <ul>
+        <li>Create new classes</li>
+        <li>Assign teachers to classes</li>
+        <li>Manage class schedules</li>
+        <li>View class enrollment statistics</li>
+    </ul>
+    
+    <h3>Teacher Management</h3>
+    <ul>
+        <li>Add new teachers</li>
+        <li>Update teacher information</li>
+        <li>Assign teachers to subjects</li>
+        <li>View teacher performance reports</li>
+    </ul>
+    
+    <h3>Reports & Analytics</h3>
+    <ul>
+        <li>Generate attendance reports</li>
+        <li>View academic performance analytics</li>
+        <li>Export data for external analysis</li>
+    </ul>
+    
+    <p><a href="{% url 'dashboard' %}" class="btn">Back to Main Dashboard</a></p>
+</div>
+{% endblock %}

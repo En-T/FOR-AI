@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+    <h2>Education Department Dashboard</h2>
+    <p>Welcome, {{ user.get_full_name|default:user.username }}!</p>
+    
+    <p>As an <strong>Education Department</strong> user, you have access to district-wide management features:</p>
+    
+    <h3>District Overview</h3>
+    <ul>
+        <li>View all schools in the district</li>
+        <li>Monitor district-wide performance metrics</li>
+        <li>Access aggregated school reports</li>
+        <li>Compare school performance statistics</li>
+    </ul>
+    
+    <h3>Policy Management</h3>
+    <ul>
+        <li>Create and distribute district policies</li>
+        <li>Update curriculum guidelines</li>
+        <li>Manage assessment standards</li>
+        <li>Handle compliance reporting</li>
+    </ul>
+    
+    <h3>Resource Allocation</h3>
+    <ul>
+        <li>Monitor budget allocation across schools</li>
+        <li>Track resource utilization</li>
+        <li>Generate funding reports</li>
+        <li>Manage educational material distribution</li>
+    </ul>
+    
+    <h3>Analytics & Reporting</h3>
+    <ul>
+        <li>Generate district-wide performance reports</li>
+        <li>Access educational trend analysis</li>
+        <li>View comparative school data</li>
+        <li>Export data for government reporting</li>
+    </ul>
+    
+    <p><a href="{% url 'dashboard' %}" class="btn">Back to Main Dashboard</a></p>
+</div>
+{% endblock %}
