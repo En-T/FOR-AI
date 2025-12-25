@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{% if form.instance.id %}Edit School{% else %}Add School{% endif %} - School Management System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">{% if form.instance.id %}Edit School{% else %}Add School{% endif %}</h1>
+</div>
+
+<div class="card">
+    <form method="post" data-validate>
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_name">School Name *</label>
+            <input type="text" id="id_name" name="name" class="form-control"
+                   value="{{ form.name.value|default:'' }}"
+                   data-required="true"
+                   data-minlength="2"
+                   data-maxlength="255"
+                   placeholder="Enter school name">
+            {% if form.name.errors %}
+            <div class="form-error">{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_director">Director *</label>
+            <input type="text" id="id_director" name="director" class="form-control"
+                   value="{{ form.director.value|default:'' }}"
+                   data-required="true"
+                   data-minlength="2"
+                   data-maxlength="255"
+                   placeholder="Enter director's name">
+            {% if form.director.errors %}
+            <div class="form-error">{{ form.director.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_graduating_class">Graduating Class (1-10) *</label>
+            <select id="id_graduating_class" name="graduating_class" class="form-control" data-required="true">
+                <option value="">Select grade</option>
+                {% for i in "12345678910"|make_list %}
+                <option value="{{ forloop.counter }}" {% if form.graduating_class.value == forloop.counter|stringformat:"s" %}selected{% endif %}>
+                    {{ forloop.counter }} class
+                </option>
+                {% endfor %}
+            </select>
+            {% if form.graduating_class.errors %}
+            <div class="form-error">{{ form.graduating_class.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_location">Location *</label>
+            <input type="text" id="id_location" name="location" class="form-control"
+                   value="{{ form.location.value|default:'' }}"
+                   data-required="true"
+                   data-minlength="2"
+                   data-maxlength="255"
+                   placeholder="Enter location">
+            {% if form.location.errors %}
+            <div class="form-error">{{ form.location.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">Save</button>
+            <a href="/schools/" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

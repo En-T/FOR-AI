@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Grade Input - School Management System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Grade Input</h1>
+</div>
+
+<div class="filters">
+    <div class="form-group">
+        <label for="class-filter">Select Class:</label>
+        <select id="class-filter" class="form-control">
+            <option value="">Select class</option>
+            {% for class in classes %}
+            <option value="{{ class.id }}" {% if selected_class.id == class.id %}selected{% endif %}>
+                {{ class.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="quarter-filter">Select Quarter:</label>
+        <select id="quarter-filter" class="form-control">
+            <option value="q1" {% if quarter == 'q1' %}selected{% endif %}>First Quarter</option>
+            <option value="q2" {% if quarter == 'q2' %}selected{% endif %}>Second Quarter</option>
+            <option value="q3" {% if quarter == 'q3' %}selected{% endif %}>Third Quarter</option>
+            <option value="q4" {% if quarter == 'q4' %}selected{% endif %}>Fourth Quarter</option>
+            <option value="exam" {% if quarter == 'exam' %}selected{% endif %}>Exam</option>
+            <option value="annual" {% if quarter == 'annual' %}selected{% endif %}>Annual</option>
+            <option value="final" {% if quarter == 'final' %}selected{% endif %}>Final</option>
+        </select>
+    </div>
+</div>
+
+{% if selected_class and students %}
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="quarter" value="{{ quarter }}">
+
+        <div class="table-container">
+            <table class="grade-input-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        {% for subject in subjects %}
+                        <th>{{ subject.name }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.full_name }}</td>
+                        {% for subject in subjects %}
+                        <td>
+                            {% with key=student.id|add:"_"|add:subject.id %}
+                            <input type="number"
+                                   name="grade_{{ student.id }}_{{ subject.id }}"
+                                   value="{{ grades|get_item:key|default:'' }}"
+                                   min="1"
+                                   max="10"
+                                   placeholder="-"
+                                   class="{% if grades|get_item:key <= 2 %}grade-low{% endif %}">
+                            {% endwith %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">Save Grades</button>
+        </div>
+    </form>
+</div>
+{% else %}
+<div class="card">
+    <p>Select a class to enter grades.</p>
+</div>
+{% endif %}
+
+<script>
+document.getElementById('class-filter').addEventListener('change', function() {
+    const classId = this.value;
+    const quarter = document.getElementById('quarter-filter').value;
+    if (classId) {
+        window.location.href = '/grades/input/' + classId + '/?quarter=' + quarter;
+    }
+});
+
+document.getElementById('quarter-filter').addEventListener('change', function() {
+    const classId = document.getElementById('class-filter').value;
+    const quarter = this.value;
+    if (classId) {
+        window.location.href = '/grades/input/' + classId + '/?quarter=' + quarter;
+    }
+});
+
+// Highlight low grades on load
+document.querySelectorAll('.grade-input-table input[type="number"]').forEach(input => {
+    const value = parseInt(input.value);
+    if (value >= 1 && value <= 2) {
+        input.classList.add('grade-low');
+    }
+    input.addEventListener('input', function() {
+        const value = parseInt(this.value);
+        if (value >= 1 && value <= 2) {
+            this.classList.add('grade-low');
+        } else {
+            this.classList.remove('grade-low');
+        }
+    });
+});
+</script>
+
+{% load custom_filters %}
+{% endblock %}

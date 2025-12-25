@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Student Grades Report - School Management System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Student Grades Report</h1>
+</div>
+
+<div class="filters">
+    <div class="form-group">
+        <label for="student-filter">Select Student:</label>
+        <select id="student-filter" class="form-control">
+            <option value="">Select student</option>
+            {% for student in students %}
+            <option value="{{ student.id }}" {% if selected_student.id == student.id %}selected{% endif %}>
+                {{ student.full_name }} ({{ student.school_class.name }})
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+{% if selected_student %}
+<div class="card">
+    <div class="card-header">
+        {{ selected_student.full_name }} - {{ selected_student.school_class.name }}
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Q1</th>
+                    <th>Q2</th>
+                    <th>Q3</th>
+                    <th>Q4</th>
+                    <th>Exam</th>
+                    <th>Annual</th>
+                    <th>Final</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in grades_data %}
+                <tr>
+                    <td><strong>{{ row.subject.name }}</strong></td>
+                    <td class="{% if row.q1 <= 2 %}grade-low{% endif %}">{{ row.q1|default:"-" }}</td>
+                    <td class="{% if row.q2 <= 2 %}grade-low{% endif %}">{{ row.q2|default:"-" }}</td>
+                    <td class="{% if row.q3 <= 2 %}grade-low{% endif %}">{{ row.q3|default:"-" }}</td>
+                    <td class="{% if row.q4 <= 2 %}grade-low{% endif %}">{{ row.q4|default:"-" }}</td>
+                    <td class="{% if row.exam <= 2 %}grade-low{% endif %}">{{ row.exam|default:"-" }}</td>
+                    <td class="{% if row.annual <= 2 %}grade-low{% endif %}">{{ row.annual|default:"-" }}</td>
+                    <td class="{% if row.final <= 2 %}grade-low{% endif %}">{{ row.final|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">No grades found for this student.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<script>
+document.getElementById('student-filter').addEventListener('change', function() {
+    const studentId = this.value;
+    if (studentId) {
+        window.location.href = '/reports/student/' + studentId + '/';
+    }
+});
+</script>
+{% endblock %}

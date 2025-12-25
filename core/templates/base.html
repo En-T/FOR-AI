@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}School Management System{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">School Management</a>
+        {% if user.is_authenticated or request.session.user_id %}
+        <ul class="navbar-menu">
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            {% if request.session.user_role == 'admin_school' %}
+            <li><a href="/classes/">Classes</a></li>
+            <li><a href="/students/">Students</a></li>
+            <li><a href="/teachers/">Teachers</a></li>
+            <li><a href="/grades/input/1/">Grades</a></li>
+            {% elif request.session.user_role == 'dept_education' %}
+            <li><a href="/schools/">Schools</a></li>
+            {% endif %}
+        </ul>
+        <div class="navbar-user">
+            <span>{{ request.session.username }}</span>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+        {% endif %}
+    </nav>
+
+    <div class="container main-content">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message message-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2025 School Management System</p>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

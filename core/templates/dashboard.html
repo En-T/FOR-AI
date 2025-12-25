@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - School Management System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Dashboard</h1>
+</div>
+
+{% if role == 'admin_school' %}
+{# ADMIN_SCHOOL Dashboard #}
+
+{% if school %}
+<div class="card">
+    <h2>{{ school.name }}</h2>
+    <p>Location: {{ school.location }}</p>
+    <p>Director: {{ school.director }}</p>
+</div>
+{% endif %}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.students }}</div>
+        <div class="stat-label">Students</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.classes }}</div>
+        <div class="stat-label">Classes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.teachers }}</div>
+        <div class="stat-label">Teachers</div>
+    </div>
+</div>
+
+<div class="quick-links">
+    <a href="/classes/" class="quick-link">
+        <div class="quick-link-icon">📚</div>
+        <div>Classes</div>
+    </a>
+    <a href="/students/" class="quick-link">
+        <div class="quick-link-icon">👨‍🎓</div>
+        <div>Students</div>
+    </a>
+    <a href="/teachers/" class="quick-link">
+        <div class="quick-link-icon">👨‍🏫</div>
+        <div>Teachers</div>
+    </a>
+    <a href="/grades/input/1/" class="quick-link">
+        <div class="quick-link-icon">📝</div>
+        <div>Grades</div>
+    </a>
+</div>
+
+{% elif role == 'dept_education' %}
+{# DEPT_EDUCATION Dashboard #}
+
+<div class="quick-links">
+    <a href="/schools/" class="quick-link">
+        <div class="quick-link-icon">🏫</div>
+        <div>Schools</div>
+    </a>
+    <a href="/subjects/" class="quick-link">
+        <div class="quick-link-icon">📖</div>
+        <div>Subjects</div>
+    </a>
+    <a href="/users/" class="quick-link">
+        <div class="quick-link-icon">👥</div>
+        <div>Users</div>
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">All Schools</div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Director</th>
+                    <th>Graduating Class</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for school in schools %}
+                <tr>
+                    <td>{{ school.name }}</td>
+                    <td>{{ school.director }}</td>
+                    <td>{{ school.graduating_class }}</td>
+                    <td>{{ school.location }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No schools found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

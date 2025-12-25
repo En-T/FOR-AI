@@ -1,0 +1,314 @@
+[
+  {
+    "model": "core.user",
+    "pk": 1,
+    "fields": {
+      "username": "admin_school1",
+      "password": "pbkdf2_sha256$720000$test$test",
+      "role": "admin_school",
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 2,
+    "fields": {
+      "username": "dept_edu1",
+      "password": "pbkdf2_sha256$720000$test$test",
+      "role": "dept_education",
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.school",
+    "pk": 1,
+    "fields": {
+      "name": "School #123",
+      "director": "Ivanov Ivan Ivanovich",
+      "graduating_class": 9,
+      "location": "Moscow, Lenina street 1",
+      "created_by": 2,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.school",
+    "pk": 2,
+    "fields": {
+      "name": "Gymnasium #456",
+      "director": "Petrov Petr Petrovich",
+      "graduating_class": 10,
+      "location": "Moscow, Pushkina street 15",
+      "created_by": 2,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.subject",
+    "pk": 1,
+    "fields": {
+      "name": "Mathematics",
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.subject",
+    "pk": 2,
+    "fields": {
+      "name": "Physics",
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.subject",
+    "pk": 3,
+    "fields": {
+      "name": "Russian Language",
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.subject",
+    "pk": 4,
+    "fields": {
+      "name": "English Language",
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.subject",
+    "pk": 5,
+    "fields": {
+      "name": "History",
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.teacher",
+    "pk": 1,
+    "fields": {
+      "full_name": "Sidorov Alexey Sergeevich",
+      "school": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.teacher",
+    "pk": 2,
+    "fields": {
+      "full_name": "Smirnova Elena Nikolaevna",
+      "school": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.teacher",
+    "pk": 3,
+    "fields": {
+      "full_name": "Kuznetsov Dmitry Alexandrovich",
+      "school": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.class",
+    "pk": 1,
+    "fields": {
+      "name": "5А",
+      "school": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.class",
+    "pk": 2,
+    "fields": {
+      "name": "6Б",
+      "school": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.class",
+    "pk": 3,
+    "fields": {
+      "name": "7",
+      "school": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.subgroup",
+    "pk": 1,
+    "fields": {
+      "name": "Group 1",
+      "school_class": 1,
+      "subject": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.subgroup",
+    "pk": 2,
+    "fields": {
+      "name": "Group 2",
+      "school_class": 1,
+      "subject": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.subgroup",
+    "pk": 3,
+    "fields": {
+      "name": "Full Class",
+      "school_class": 1,
+      "subject": 3,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.student",
+    "pk": 1,
+    "fields": {
+      "full_name": "Andreev Mikhail Alexandrovich",
+      "school_class": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.student",
+    "pk": 2,
+    "fields": {
+      "full_name": "Bogdanova Anna Vladimirovna",
+      "school_class": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.student",
+    "pk": 3,
+    "fields": {
+      "full_name": "Vasiliev Alexey Pavlovich",
+      "school_class": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.student",
+    "pk": 4,
+    "fields": {
+      "full_name": "Golubeva Ekaterina Ivanovna",
+      "school_class": 1,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.student",
+    "pk": 5,
+    "fields": {
+      "full_name": "Dmitriev Sergei Nikolaevich",
+      "school_class": 2,
+      "created_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.teacherassignment",
+    "pk": 1,
+    "fields": {
+      "teacher": 1,
+      "subgroup": 1,
+      "assigned_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.studentsubgroupassignment",
+    "pk": 1,
+    "fields": {
+      "student": 1,
+      "subgroup": 1,
+      "assigned_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.studentsubgroupassignment",
+    "pk": 2,
+    "fields": {
+      "student": 2,
+      "subgroup": 1,
+      "assigned_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.studentsubgroupassignment",
+    "pk": 3,
+    "fields": {
+      "student": 3,
+      "subgroup": 2,
+      "assigned_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.studentsubgroupassignment",
+    "pk": 4,
+    "fields": {
+      "student": 4,
+      "subgroup": 2,
+      "assigned_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.grade",
+    "pk": 1,
+    "fields": {
+      "student": 1,
+      "subject": 1,
+      "quarter": "q1",
+      "grade": 5,
+      "assigned_by": 1,
+      "assigned_at": "2025-01-15T00:00:00Z",
+      "updated_at": "2025-01-15T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.grade",
+    "pk": 2,
+    "fields": {
+      "student": 1,
+      "subject": 2,
+      "quarter": "q1",
+      "grade": 2,
+      "assigned_by": 1,
+      "assigned_at": "2025-01-15T00:00:00Z",
+      "updated_at": "2025-01-15T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.grade",
+    "pk": 3,
+    "fields": {
+      "student": 2,
+      "subject": 1,
+      "quarter": "q1",
+      "grade": 4,
+      "assigned_by": 1,
+      "assigned_at": "2025-01-15T00:00:00Z",
+      "updated_at": "2025-01-15T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.grade",
+    "pk": 4,
+    "fields": {
+      "student": 1,
+      "subject": 3,
+      "quarter": "q1",
+      "grade": 4,
+      "assigned_by": 1,
+      "assigned_at": "2025-01-15T00:00:00Z",
+      "updated_at": "2025-01-15T00:00:00Z"
+    }
+  }
+]

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Subgroup Assignments - School Management System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Subgroup Assignments</h1>
+</div>
+
+<div class="filters">
+    <div class="form-group">
+        <label for="class-filter">Select Class:</label>
+        <select id="class-filter" class="form-control">
+            <option value="">Select class</option>
+            {% for class in classes %}
+            <option value="{{ class.id }}" {% if selected_class.id == class.id %}selected{% endif %}>
+                {{ class.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+{% if selected_class %}
+<div class="card">
+    <div class="card-header">Subgroups for {{ selected_class.name }}</div>
+
+    <div class="subgroup-assignments">
+        {% for subgroup in subgroups %}
+        <div class="subgroup-card">
+            <h4>{{ subgroup.subject.name }} - {{ subgroup.name }}</h4>
+            <p>
+                <strong>Teacher:</strong>
+                {% with assignment=subgroup.teacher_assignments.first %}
+                {% if assignment %}
+                {{ assignment.teacher.full_name }}
+                {% else %}
+                <span style="color: #999;">Not assigned</span>
+                {% endif %}
+                {% endwith %}
+            </p>
+            <form action="/subgroups/{{ subgroup.id }}/assign-teacher/" method="post" style="margin-top: 10px;">
+                {% csrf_token %}
+                <select name="teacher_id" class="form-control" style="margin-bottom: 10px;">
+                    <option value="">Select teacher</option>
+                    {% for teacher in teachers %}
+                    <option value="{{ teacher.id }}">{{ teacher.full_name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary btn-sm">Assign Teacher</button>
+            </form>
+        </div>
+        {% empty %}
+        <p>No subgroups found for this class. Add subjects and create subgroups first.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<script>
+document.getElementById('class-filter').addEventListener('change', function() {
+    const classId = this.value;
+    if (classId) {
+        window.location.href = '/subgroups/assignments/' + classId + '/';
+    } else {
+        window.location.href = '/subgroups/assignments/0/';
+    }
+});
+</script>
+{% endblock %}

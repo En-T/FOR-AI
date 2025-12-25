@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Assign Students to Subgroups - School Management System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Assign Students to Subgroups</h1>
+</div>
+
+<div class="filters">
+    <div class="form-group">
+        <label for="class-filter">Select Class:</label>
+        <select id="class-filter" class="form-control">
+            <option value="">Select class</option>
+            {% for class in classes %}
+            <option value="{{ class.id }}" {% if selected_class.id == class.id %}selected{% endif %}>
+                {{ class.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+{% if selected_class %}
+{% if subgroups %}
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+
+        {% for subgroup in subgroups %}
+        <div class="subgroup-card" style="margin-bottom: 20px;">
+            <h4>{{ subgroup.subject.name }} - {{ subgroup.name }}</h4>
+            <div class="subgroup-students">
+                {% for student in students %}
+                <div class="subgroup-student">
+                    <input type="checkbox"
+                           id="subgroup_{{ subgroup.id }}_student_{{ student.id }}"
+                           name="subgroups"
+                           value="{{ subgroup.id }}_{{ student.id }}"
+                           {% if student.id in subgroup.student_ids %}checked{% endif %}>
+                    <label for="subgroup_{{ subgroup.id }}_student_{{ student.id }}">
+                        {{ student.full_name }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">Save Distribution</button>
+        </div>
+    </form>
+</div>
+{% else %}
+<div class="card">
+    <p>No subgroups found for this class. Create subgroups first.</p>
+</div>
+{% endif %}
+{% endif %}
+
+<script>
+document.getElementById('class-filter').addEventListener('change', function() {
+    const classId = this.value;
+    if (classId) {
+        window.location.href = '/subgroups/students/' + classId + '/';
+    } else {
+        window.location.href = '/subgroups/students/0/';
+    }
+});
+</script>
+{% endblock %}
