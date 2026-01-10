@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user_detail.username }} - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+    <a href="{% url 'director-user-list' %}">Пользователи</a>
+    <span>{{ user_detail.username }}</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">{{ user_detail.username }}</h1>
+    <div class="header-actions">
+        <a href="{% url 'director-user-update' user_detail.id %}" class="btn btn-secondary">Редактировать</a>
+        <a href="{% url 'director-user-change-password' user_detail.id %}" class="btn btn-warning">Изменить пароль</a>
+        <a href="{% url 'director-user-delete' user_detail.id %}" class="btn btn-danger">Удалить</a>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <div class="detail-card">
+        <h3>Основная информация</h3>
+        <div class="detail-item">
+            <span class="detail-label">Имя пользователя:</span>
+            <span class="detail-value">{{ user_detail.username }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">{{ user_detail.email|default:"-" }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Имя:</span>
+            <span class="detail-value">{{ user_detail.first_name|default:"-" }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Фамилия:</span>
+            <span class="detail-value">{{ user_detail.last_name|default:"-" }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Роль:</span>
+            <span class="detail-value">{{ user_detail.get_role_display }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Школа:</span>
+            <span class="detail-value">{{ user_detail.school.name|default:"-" }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Активен:</span>
+            <span class="detail-value">
+                {% if user_detail.is_active %}
+                <span class="status-badge status-active">Да</span>
+                {% else %}
+                <span class="status-badge status-inactive">Нет</span>
+                {% endif %}
+            </span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Дата создания:</span>
+            <span class="detail-value">{{ user_detail.created_at|date:"d.m.Y H:i" }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Последний вход:</span>
+            <span class="detail-value">{{ user_detail.last_login|date:"d.m.Y H:i"|default:"Никогда" }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="actions-card">
+    <h3>Действия</h3>
+    <div class="action-buttons">
+        <a href="{% url 'director-user-list' %}" class="btn btn-secondary">Назад к списку</a>
+        <a href="{% url 'director-user-update' user_detail.id %}" class="btn btn-primary">Редактировать профиль</a>
+        <a href="{% url 'director-user-change-password' user_detail.id %}" class="btn btn-warning">Изменить пароль</a>
+    </div>
+</div>
+{% endblock %}

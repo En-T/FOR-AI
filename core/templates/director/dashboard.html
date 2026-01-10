@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Панель управления - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Панель управления отдела образования</h1>
+    <p class="subtitle">Добро пожаловать, {{ user.first_name|default:user.username }}!</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">🏫</div>
+        <div class="stat-value">{{ stats.total_schools }}</div>
+        <div class="stat-label">Школ</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value">{{ stats.total_classes }}</div>
+        <div class="stat-label">Классов</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">👨‍🎓</div>
+        <div class="stat-value">{{ stats.total_students }}</div>
+        <div class="stat-label">Учащихся</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">👨‍🏫</div>
+        <div class="stat-value">{{ stats.total_teachers }}</div>
+        <div class="stat-label">Учителей</div>
+    </div>
+</div>
+
+<div class="quick-links">
+    <a href="{% url 'director-school-list' %}" class="quick-link">
+        <div class="quick-link-icon">🏫</div>
+        <div>Школы</div>
+    </a>
+    <a href="{% url 'director-user-list' %}" class="quick-link">
+        <div class="quick-link-icon">👥</div>
+        <div>Пользователи</div>
+    </a>
+    <a href="{% url 'director-subject-list' %}" class="quick-link">
+        <div class="quick-link-icon">📖</div>
+        <div>Предметы</div>
+    </a>
+    <a href="{% url 'director-report' %}" class="quick-link">
+        <div class="quick-link-icon">📊</div>
+        <div>Отчет</div>
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>Ваши школы</h2>
+        <a href="{% url 'director-school-create' %}" class="btn btn-primary">Добавить школу</a>
+    </div>
+    
+    {% if schools %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Директор</th>
+                    <th>Выпускной класс</th>
+                    <th>Классов</th>
+                    <th>Учащихся</th>
+                    <th>Учителей</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for school in schools %}
+                <tr>
+                    <td><a href="{% url 'director-school-detail' school.id %}">{{ school.name }}</a></td>
+                    <td>{{ school.director }}</td>
+                    <td>{{ school.graduating_class }} класс</td>
+                    <td>{{ school.num_classes }}</td>
+                    <td>{{ school.num_students }}</td>
+                    <td>{{ school.num_teachers }}</td>
+                    <td class="actions">
+                        <a href="{% url 'director-school-detail' school.id %}" class="btn btn-info btn-sm">Просмотр</a>
+                        <a href="{% url 'director-school-update' school.id %}" class="btn btn-secondary btn-sm">Редактировать</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>У вас пока нет школ. Начните с создания первой школы.</p>
+        <a href="{% url 'director-school-create' %}" class="btn btn-primary">Добавить школу</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

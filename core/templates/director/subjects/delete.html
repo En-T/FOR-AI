@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Удалить {{ subject.name }} - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+    <a href="{% url 'director-subject-list' %}">Предметы</a>
+    <a href="{% url 'director-subject-detail' subject.id %}">{{ subject.name }}</a>
+    <span>Удалить</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Удалить предмет</h1>
+</div>
+
+<div class="confirm-delete-container">
+    <div class="warning-message">
+        <h3>⚠️ Внимание!</h3>
+        <p>Вы собираетесь удалить предмет <strong>{{ subject.name }}</strong>.</p>
+        <p>Это действие <strong>нельзя отменить</strong>!</p>
+    </div>
+
+    <div class="confirm-details">
+        <h4>Информация о предмете:</h4>
+        <ul>
+            <li><strong>Название:</strong> {{ subject.name }}</li>
+            <li><strong>Дата создания:</strong> {{ subject.created_at|date:"d.m.Y H:i" }}</li>
+        </ul>
+    </div>
+
+    <form method="post" class="confirm-form">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger">Да, удалить предмет</button>
+            <a href="{% url 'director-subject-detail' subject.id %}" class="btn btn-secondary">Нет, отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

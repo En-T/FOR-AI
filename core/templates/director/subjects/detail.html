@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ subject.name }} - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+    <a href="{% url 'director-subject-list' %}">Предметы</a>
+    <span>{{ subject.name }}</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">{{ subject.name }}</h1>
+    <div class="header-actions">
+        <a href="{% url 'director-subject-update' subject.id %}" class="btn btn-secondary">Редактировать</a>
+        <a href="{% url 'director-subject-delete' subject.id %}" class="btn btn-danger">Удалить</a>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <div class="detail-card">
+        <h3>Информация о предмете</h3>
+        <div class="detail-item">
+            <span class="detail-label">Название:</span>
+            <span class="detail-value">{{ subject.name }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Дата создания:</span>
+            <span class="detail-value">{{ subject.created_at|date:"d.m.Y H:i" }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="actions-card">
+    <h3>Действия</h3>
+    <div class="action-buttons">
+        <a href="{% url 'director-subject-list' %}" class="btn btn-secondary">Назад к списку</a>
+        <a href="{% url 'director-subject-update' subject.id %}" class="btn btn-primary">Редактировать предмет</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактировать {{ subject.name }} - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+    <a href="{% url 'director-subject-list' %}">Предметы</a>
+    <a href="{% url 'director-subject-detail' subject.id %}">{{ subject.name }}</a>
+    <span>Редактировать</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Редактировать предмет</h1>
+</div>
+
+<div class="form-container">
+    <form method="post" class="standard-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_name">Название предмета *</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+            <div class="error-message">{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+            <a href="{% url 'director-subject-detail' subject.id %}" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

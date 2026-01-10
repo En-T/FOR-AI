@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Удалить {{ user_detail.username }} - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+    <a href="{% url 'director-user-list' %}">Пользователи</a>
+    <a href="{% url 'director-user-detail' user_detail.id %}">{{ user_detail.username }}</a>
+    <span>Удалить</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Удалить пользователя</h1>
+</div>
+
+<div class="confirm-delete-container">
+    <div class="warning-message">
+        <h3>⚠️ Внимание!</h3>
+        <p>Вы собираетесь удалить пользователя <strong>{{ user_detail.username }}</strong>.</p>
+        <p>Это действие <strong>нельзя отменить</strong>!</p>
+    </div>
+
+    <div class="confirm-details">
+        <h4>Информация о пользователе:</h4>
+        <ul>
+            <li><strong>Имя пользователя:</strong> {{ user_detail.username }}</li>
+            <li><strong>Email:</strong> {{ user_detail.email|default:"-" }}</li>
+            <li><strong>Имя:</strong> {{ user_detail.first_name|default:"-" }}</li>
+            <li><strong>Фамилия:</strong> {{ user_detail.last_name|default:"-" }}</li>
+            <li><strong>Роль:</strong> {{ user_detail.get_role_display }}</li>
+            <li><strong>Школа:</strong> {{ user_detail.school.name|default:"-" }}</li>
+        </ul>
+    </div>
+
+    <form method="post" class="confirm-form">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger">Да, удалить пользователя</button>
+            <a href="{% url 'director-user-detail' user_detail.id %}" class="btn btn-secondary">Нет, отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ school.name }} - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+    <a href="{% url 'director-school-list' %}">Школы</a>
+    <span>{{ school.name }}</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">{{ school.name }}</h1>
+    <div class="header-actions">
+        <a href="{% url 'director-school-update' school.id %}" class="btn btn-secondary">Редактировать</a>
+        <a href="{% url 'director-school-delete' school.id %}" class="btn btn-danger">Удалить</a>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <div class="detail-card">
+        <h3>Основная информация</h3>
+        <div class="detail-item">
+            <span class="detail-label">Название школы:</span>
+            <span class="detail-value">{{ school.name }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Директор:</span>
+            <span class="detail-value">{{ school.director }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Выпускной класс:</span>
+            <span class="detail-value">{{ school.graduating_class }} класс</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Расположение:</span>
+            <span class="detail-value">{{ school.location }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Создано:</span>
+            <span class="detail-value">{{ school.created_at|date:"d.m.Y H:i" }}</span>
+        </div>
+    </div>
+
+    <div class="stats-card">
+        <h3>Статистика</h3>
+        <div class="mini-stats">
+            <div class="mini-stat">
+                <div class="mini-stat-value">{{ stats.classes }}</div>
+                <div class="mini-stat-label">Классов</div>
+            </div>
+            <div class="mini-stat">
+                <div class="mini-stat-value">{{ stats.students }}</div>
+                <div class="mini-stat-label">Учащихся</div>
+            </div>
+            <div class="mini-stat">
+                <div class="mini-stat-value">{{ stats.teachers }}</div>
+                <div class="mini-stat-label">Учителей</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="actions-card">
+    <h3>Действия</h3>
+    <div class="action-buttons">
+        <a href="{% url 'director-school-list' %}" class="btn btn-secondary">Назад к списку</a>
+        <a href="{% url 'director-school-update' school.id %}" class="btn btn-primary">Редактировать школу</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактировать {{ user_detail.username }} - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+    <a href="{% url 'director-user-list' %}">Пользователи</a>
+    <a href="{% url 'director-user-detail' user_detail.id %}">{{ user_detail.username }}</a>
+    <span>Редактировать</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Редактировать пользователя</h1>
+</div>
+
+<div class="form-container">
+    <form method="post" class="standard-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_username">Имя пользователя:</label>
+            <input type="text" value="{{ user_detail.username }}" disabled class="form-control">
+            <small class="help-text">Имя пользователя нельзя изменить</small>
+        </div>
+
+        <div class="form-group">
+            <label for="id_email">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            <div class="error-message">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="id_first_name">Имя</label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}
+                <div class="error-message">{{ form.first_name.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group half">
+                <label for="id_last_name">Фамилия</label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}
+                <div class="error-message">{{ form.last_name.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="id_school">Школа *</label>
+            {{ form.school }}
+            {% if form.school.errors %}
+            <div class="error-message">{{ form.school.errors }}</div>
+            {% endif %}
+        </div>
+
+        {{ form.role }}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+            <a href="{% url 'director-user-detail' user_detail.id %}" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

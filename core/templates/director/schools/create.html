@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить школу - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+    <a href="{% url 'director-school-list' %}">Школы</a>
+    <span>Добавить</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Добавить школу</h1>
+</div>
+
+<div class="form-container">
+    <form method="post" class="standard-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_name">Название школы *</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+            <div class="error-message">{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_director">ФИО директора *</label>
+            {{ form.director }}
+            {% if form.director.errors %}
+            <div class="error-message">{{ form.director.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_graduating_class">Выпускной класс *</label>
+            {{ form.graduating_class }}
+            {% if form.graduating_class.errors %}
+            <div class="error-message">{{ form.graduating_class.errors }}</div>
+            {% endif %}
+            <small class="help-text">Укажите, какой класс является выпускным в этой школе</small>
+        </div>
+
+        <div class="form-group">
+            <label for="id_location">Расположение *</label>
+            {{ form.location }}
+            {% if form.location.errors %}
+            <div class="error-message">{{ form.location.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Создать школу</button>
+            <a href="{% url 'director-school-list' %}" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

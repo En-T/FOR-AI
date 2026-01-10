@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Удалить {{ school.name }} - Отдел образования{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'director-dashboard' %}">Отдел образования</a>
+    <a href="{% url 'director-school-list' %}">Школы</a>
+    <a href="{% url 'director-school-detail' school.id %}">{{ school.name }}</a>
+    <span>Удалить</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Удалить школу</h1>
+</div>
+
+<div class="confirm-delete-container">
+    <div class="warning-message">
+        <h3>⚠️ Внимание!</h3>
+        <p>Вы собираетесь удалить школу <strong>{{ school.name }}</strong>.</p>
+        <p>Это действие <strong>нельзя отменить</strong>!</p>
+    </div>
+
+    <div class="confirm-details">
+        <h4>Информация о школе:</h4>
+        <ul>
+            <li><strong>Название:</strong> {{ school.name }}</li>
+            <li><strong>Директор:</strong> {{ school.director }}</li>
+            <li><strong>Выпускной класс:</strong> {{ school.graduating_class }} класс</li>
+            <li><strong>Расположение:</strong> {{ school.location }}</li>
+        </ul>
+    </div>
+
+    <form method="post" class="confirm-form">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger">Да, удалить школу</button>
+            <a href="{% url 'director-school-detail' school.id %}" class="btn btn-secondary">Нет, отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
