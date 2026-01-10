@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}User Management{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'superuser-dashboard' %}">Superuser</a>
+    <a href="{% url 'user-list' %}">Users</a>
+{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h1>Users</h1>
+    <a href="{% url 'user-create' %}" class="btn btn-primary">Create New User</a>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>School</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.first_name }} {{ u.last_name }}</td>
+            <td>{{ u.get_role_display }}</td>
+            <td>{{ u.school.name|default:"-" }}</td>
+            <td>
+                <a href="{% url 'user-detail' u.id %}" class="btn btn-sm btn-info">View</a>
+                <a href="{% url 'user-update' u.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'user-change-password' u.id %}" class="btn btn-sm btn-secondary">Password</a>
+                <a href="{% url 'user-delete' u.id %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No users found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}User Details{% endblock %}
+
+{% block content %}
+<h1>User Details: {{ user_detail.username }}</h1>
+
+<div class="detail-card">
+    <p><strong>Username:</strong> {{ user_detail.username }}</p>
+    <p><strong>Email:</strong> {{ user_detail.email }}</p>
+    <p><strong>Full Name:</strong> {{ user_detail.first_name }} {{ user_detail.last_name }}</p>
+    <p><strong>Role:</strong> {{ user_detail.get_role_display }}</p>
+    <p><strong>School:</strong> {{ user_detail.school.name|default:"None" }}</p>
+    <p><strong>Active:</strong> {{ user_detail.is_active|yesno:"Yes,No" }}</p>
+    <p><strong>Created at:</strong> {{ user_detail.created_at|date:"Y-m-d H:i" }}</p>
+</div>
+
+<div class="actions">
+    <a href="{% url 'user-update' user_detail.id %}" class="btn btn-warning">Edit</a>
+    <a href="{% url 'user-list' %}" class="btn btn-secondary">Back to List</a>
+</div>
+{% endblock %}

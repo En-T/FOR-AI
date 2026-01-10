@@ -1,14 +1,27 @@
 from django.urls import path
 from . import views
+from . import views_auth, views_superuser
 
 urlpatterns = [
     # Authentication
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
-    path('register/', views.register_view, name='register'),
+    path('login/', views_auth.LoginView.as_view(), name='login'),
+    path('logout/', views_auth.LogoutView.as_view(), name='logout'),
+    path('register/', views.register_view, name='register'), # Keep old register if needed, though superuser has its own
 
     # Dashboard
     path('dashboard/', views.dashboard_view, name='dashboard'),
+    
+    # Superuser Routes
+    path('superuser/', views_superuser.SuperuserDashboardView.as_view(), name='superuser-dashboard'),
+    path('superuser/users/', views_superuser.UserListView.as_view(), name='user-list'),
+    path('superuser/users/create/', views_superuser.UserCreateView.as_view(), name='user-create'),
+    path('superuser/users/<int:pk>/', views_superuser.UserDetailView.as_view(), name='user-detail'),
+    path('superuser/users/<int:pk>/edit/', views_superuser.UserUpdateView.as_view(), name='user-update'),
+    path('superuser/users/<int:pk>/delete/', views_superuser.UserDeleteView.as_view(), name='user-delete'),
+    path('superuser/users/<int:pk>/change-password/', views_superuser.UserChangePasswordView.as_view(), name='user-change-password'),
+    path('superuser/statistics/', views_superuser.SchoolStatisticsView.as_view(), name='school-statistics'),
+    path('superuser/logs/', views_superuser.AuditLogListView.as_view(), name='audit-logs'),
+    path('superuser/logs/export/', views_superuser.export_logs_to_csv, name='export-logs'),
 
     # Schools (DEPT_EDUCATION)
     path('schools/', views.school_list, name='school_list'),

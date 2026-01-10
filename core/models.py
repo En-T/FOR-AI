@@ -1,30 +1,60 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 import re
 
 
-class User(models.Model):
+class UserManager(BaseUserManager):
+    def create_user(self, username, password=None, **extra_fields):
+        if not username:
+            raise ValueError('The Username field must be set')
+        user = self.model(username=username, **extra_fields)
+        if password:
+            user.set_password(password)
+        else:
+            user.set_unusable_password()
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('role', User.ROLE_SUPERUSER)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(username, password, **extra_fields)
+
+
+class User(AbstractBaseUser, PermissionsMixin):
     ROLE_ADMIN_SCHOOL = 'admin_school'
     ROLE_DEPT_EDUCATION = 'dept_education'
+    ROLE_SUPERUSER = 'superuser'
 
     ROLE_CHOICES = [
-        (ROLE_ADMIN_SCHOOL, 'Admin School'),
-        (ROLE_DEPT_EDUCATION, 'Dept Education'),
+        (ROLE_ADMIN_SCHOOL, 'School Administrator'),
+        (ROLE_DEPT_EDUCATION, 'Director of Education'),
+        (ROLE_SUPERUSER, 'Superuser'),
     ]
 
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100, unique=True)
-    password = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
+    first_name = models.CharField(max_length=100, null=True, blank=True)
+    last_name = models.CharField(max_length=100, null=True, blank=True)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES)
+    school = models.ForeignKey('School', on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def set_password(self, raw_password):
-        self.password = make_password(raw_password)
+    objects = UserManager()
 
-    def check_password(self, raw_password):
-        return check_password(raw_password, self.password)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.username
@@ -234,3 +264,34 @@ class Grade(models.Model):
 
     def __str__(self):
         return f"{self.student.full_name} - {self.subject} ({self.quarter}): {self.grade}"
+
+
+class AuditLog(models.Model):
+    ACTION_CREATE = 'CREATE'
+    ACTION_UPDATE = 'UPDATE'
+    ACTION_DELETE = 'DELETE'
+    ACTION_LOGIN = 'LOGIN'
+    ACTION_VIEW = 'VIEW'
+
+    ACTION_CHOICES = [
+        (ACTION_CREATE, 'CREATE'),
+        (ACTION_UPDATE, 'UPDATE'),
+        (ACTION_DELETE, 'DELETE'),
+        (ACTION_LOGIN, 'LOGIN'),
+        (ACTION_VIEW, 'VIEW'),
+    ]
+
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='audit_logs')
+    action_type = models.CharField(max_length=20, choices=ACTION_CHOICES)
+    model_name = models.CharField(max_length=100, null=True, blank=True)
+    object_id = models.IntegerField(null=True, blank=True)
+    details = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'core_auditlog'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.created_at} - {self.user} - {self.action_type} - {self.model_name}"

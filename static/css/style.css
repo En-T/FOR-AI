@@ -426,6 +426,39 @@ tr:nth-child(even):hover {
     border-color: var(--secondary-color);
 }
 
+/* Breadcrumbs */
+.breadcrumb {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.breadcrumb a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.breadcrumb a::after {
+    content: " / ";
+    color: #999;
+}
+
+.breadcrumb a:last-child::after {
+    content: "";
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination .step-links a {
+    padding: 5px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--secondary-color);
+}
 /* Responsive */
 @media (max-width: 768px) {
     .navbar {

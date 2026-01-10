@@ -11,79 +11,21 @@ from .models import (
 )
 
 
-def get_current_user(request):
-    """Helper to get current user from session"""
-    user_id = request.session.get('user_id')
-    if user_id:
-        try:
-            return User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            pass
-    return None
-
-
 def check_role(request, allowed_roles):
     """Check if user has required role"""
-    user = get_current_user(request)
-    if not user:
+    user = request.user
+    if not user.is_authenticated:
         return None, None
     return user, user.role in allowed_roles
-
-
-# Authentication Views
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        try:
-            user = User.objects.get(username=username)
-            if user.check_password(password) and user.is_active:
-                request.session['user_id'] = user.id
-                request.session['username'] = user.username
-                request.session['user_role'] = user.role
-                return redirect('dashboard')
-            else:
-                messages.error(request, 'Invalid credentials or inactive account')
-        except User.DoesNotExist:
-            messages.error(request, 'Invalid credentials')
-
-    return render(request, 'auth/login.html')
-
-
-def logout_view(request):
-    request.session.flush()
-    return redirect('login')
-
-
-@login_required
-def register_view(request):
-    user = get_current_user(request)
-    if not user or user.role != User.ROLE_ADMIN_SCHOOL:
-        return HttpResponseForbidden('Only for admin_school')
-
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        role = request.POST.get('role')
-
-        try:
-            user_exists = User.objects.get(username=username)
-            messages.error(request, 'Username already exists')
-        except User.DoesNotExist:
-            new_user = User(username=username, role=role)
-            new_user.set_password(password)
-            new_user.save()
-            messages.success(request, 'User created successfully')
-            return redirect('dashboard')
-
-    return render(request, 'auth/register.html')
 
 
 # Dashboard View
 @login_required
 def dashboard_view(request):
-    user = get_current_user(request)
+    user = request.user
+    if user.role == User.ROLE_SUPERUSER:
+        return redirect('superuser-dashboard')
+    
     context = {'role': user.role}
 
     if user.role == User.ROLE_ADMIN_SCHOOL:
@@ -116,7 +58,7 @@ def dashboard_view(request):
 # School Views (DEPT_EDUCATION)
 @login_required
 def school_list(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_DEPT_EDUCATION:
         return HttpResponseForbidden('Access denied')
 
@@ -126,7 +68,7 @@ def school_list(request):
 
 @login_required
 def school_create(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_DEPT_EDUCATION:
         return HttpResponseForbidden('Access denied')
 
@@ -152,7 +94,7 @@ def school_create(request):
 
 @login_required
 def school_update(request, pk):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_DEPT_EDUCATION:
         return HttpResponseForbidden('Access denied')
 
@@ -177,7 +119,7 @@ def school_update(request, pk):
 
 @login_required
 def school_delete(request, pk):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_DEPT_EDUCATION:
         return HttpResponseForbidden('Access denied')
 
@@ -194,7 +136,7 @@ def school_delete(request, pk):
 # Class Views (ADMIN_SCHOOL)
 @login_required
 def class_list(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -209,7 +151,7 @@ def class_list(request):
 
 @login_required
 def class_create(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -233,7 +175,7 @@ def class_create(request):
 
 @login_required
 def class_update(request, pk):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -255,7 +197,7 @@ def class_update(request, pk):
 
 @login_required
 def class_delete(request, pk):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -272,7 +214,7 @@ def class_delete(request, pk):
 # Student Views (ADMIN_SCHOOL)
 @login_required
 def student_list(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -298,7 +240,7 @@ def student_list(request):
 
 @login_required
 def student_create(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -328,7 +270,7 @@ def student_create(request):
 
 @login_required
 def student_update(request, pk):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -358,7 +300,7 @@ def student_update(request, pk):
 
 @login_required
 def student_delete(request, pk):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -374,7 +316,7 @@ def student_delete(request, pk):
 
 @login_required
 def student_bulk_upload(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -409,7 +351,7 @@ def student_bulk_upload(request):
 # Teacher Views (ADMIN_SCHOOL)
 @login_required
 def teacher_list(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -421,7 +363,7 @@ def teacher_list(request):
 
 @login_required
 def teacher_create(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -443,7 +385,7 @@ def teacher_create(request):
 
 @login_required
 def teacher_update(request, pk):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -465,7 +407,7 @@ def teacher_update(request, pk):
 
 @login_required
 def teacher_delete(request, pk):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -482,7 +424,7 @@ def teacher_delete(request, pk):
 # Subgroup Assignment Views (ADMIN_SCHOOL)
 @login_required
 def subgroup_assignments(request, class_id):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -508,7 +450,7 @@ def subgroup_assignments(request, class_id):
 
 @login_required
 def assign_teacher(request, subgroup_id):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -536,7 +478,7 @@ def assign_teacher(request, subgroup_id):
 
 @login_required
 def assign_students_to_subgroups(request, class_id):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -598,7 +540,7 @@ def assign_students_to_subgroups(request, class_id):
 # Grade Views (ADMIN_SCHOOL)
 @login_required
 def grade_input(request, class_id):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -660,7 +602,7 @@ def grade_input(request, class_id):
 # Report Views (ADMIN_SCHOOL)
 @login_required
 def student_grades(request, student_id):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return HttpResponseForbidden('Access denied')
 
@@ -695,7 +637,7 @@ def student_grades(request, student_id):
 @login_required
 @require_POST
 def grade_save(request):
-    user = get_current_user(request)
+    user = request.user
     if user.role != User.ROLE_ADMIN_SCHOOL:
         return JsonResponse({'success': False, 'error': 'Access denied'})
 

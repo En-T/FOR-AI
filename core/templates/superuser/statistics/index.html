@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}School Statistics{% endblock %}
+
+{% block breadcrumbs %}
+    <a href="{% url 'superuser-dashboard' %}">Superuser</a>
+    <a href="{% url 'school-statistics' %}">Statistics</a>
+{% endblock %}
+
+{% block content %}
+<h1>School Statistics</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total Schools</div>
+        <div class="stat-value">{{ stats.total_schools }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Total Classes</div>
+        <div class="stat-value">{{ stats.total_classes }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Total Students</div>
+        <div class="stat-value">{{ stats.total_students }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Total Teachers</div>
+        <div class="stat-value">{{ stats.total_teachers }}</div>
+    </div>
+</div>
+
+<h2>Schools Overview</h2>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>School Name</th>
+            <th>Director</th>
+            <th>Classes</th>
+            <th>Students</th>
+            <th>Teachers</th>
+            <th>Avg Grade</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for school in schools_stats %}
+        <tr>
+            <td><a href="/schools/{{ school.id }}/">{{ school.name }}</a></td>
+            <td>{{ school.director }}</td>
+            <td>{{ school.num_classes }}</td>
+            <td>{{ school.num_students }}</td>
+            <td>{{ school.num_teachers }}</td>
+            <td>{{ school.avg_grade }}</td>
+            <td>{{ school.created_at|date:"Y-m-d" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7">No schools found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
