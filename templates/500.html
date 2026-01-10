@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ошибка сервера (500) - Система управления школой{% endblock %}
+
+{% block body_class %}error-page error-500{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">Ошибка 500</li>
+{% endblock %}
+
+{% block page_title %}Ошибка сервера{% endblock %}
+
+{% block content %}
+<div class="error-container">
+  <div class="error-content">
+    <div class="error-illustration">
+      <span class="error-emoji">⚠️</span>
+    </div>
+    
+    <div class="error-text">
+      <h1 class="error-code">500</h1>
+      <h2 class="error-title">Ошибка сервера</h2>
+      <p class="error-description">
+        Извините, на сервере произошла ошибка. Мы уже работаем над её устранением.
+      </p>
+      
+      <div class="error-suggestions">
+        <h4>Что вы можете сделать:</h4>
+        <ul>
+          <li>Попробуйте обновить страницу через несколько минут</li>
+          <li>Проверьте ваше интернет-соединение</li>
+          <li>Очистите кэш и cookies вашего браузера</li>
+          <li>Если проблема повторяется, свяжитесь с администратором</li>
+        </ul>
+      </div>
+      
+      <div class="error-actions">
+        <a href="{% url 'index' %}" class="btn btn-primary">
+          <span class="icon">🏠</span>
+          На главную
+        </a>
+        
+        <a href="javascript:location.reload()" class="btn btn-secondary">
+          <span class="icon">🔄</span>
+          Обновить страницу
+        </a>
+        
+        <button onclick="history.back()" class="btn btn-ghost">
+          <span class="icon">↩️</span>
+          Назад
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .error-page {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f4 100%);
+  }
+  
+  .error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 2rem;
+  }
+  
+  .error-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    max-width: 1000px;
+    width: 100%;
+  }
+  
+  .error-illustration {
+    text-align: center;
+  }
+  
+  .error-emoji {
+    font-size: 12rem;
+    line-height: 1;
+    display: block;
+  }
+  
+  .error-code {
+    font-family: 'Poppins', sans-serif;
+    font-size: 6rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, var(--color-error) 0%, #b91c1c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  
+  .error-title {
+    font-size: 2rem;
+    margin: 0.5rem 0 1rem 0;
+    color: var(--color-text-primary);
+  }
+  
+  .error-description {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  
+  .error-suggestions {
+    background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    border: 1px solid var(--color-border);
+  }
+  
+  .error-suggestions h4 {
+    margin: 0 0 0.75rem 0;
+    color: var(--color-text-primary);
+  }
+  
+  .error-suggestions ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+  
+  .error-suggestions li {
+    margin-bottom: 0.5rem;
+    color: var(--color-text-secondary);
+  }
+  
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .error-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .icon {
+    font-size: 1.2em;
+  }
+  
+  @media (max-width: 768px) {
+    .error-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2rem;
+    }
+    
+    .error-emoji {
+      font-size: 8rem;
+    }
+    
+    .error-code {
+      font-size: 4rem;
+    }
+    
+    .error-title {
+      font-size: 1.5rem;
+    }
+    
+    .error-actions {
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .error-container {
+      padding: 1rem;
+    }
+    
+    .error-emoji {
+      font-size: 6rem;
+    }
+    
+    .error-actions {
+      flex-direction: column;
+    }
+    
+    .error-actions .btn {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock %}

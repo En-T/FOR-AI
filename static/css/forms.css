@@ -1,0 +1,556 @@
+/* Стили для форм и input элементов */
+@import url('colors.css');
+
+/* Базовые стили формы */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.form-row > .form-group {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+/* Метки формы */
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+}
+
+.form-label.required::after {
+  content: " *";
+  color: var(--color-error);
+}
+
+.form-text {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.form-text.error {
+  color: var(--color-error);
+}
+
+.form-text.success {
+  color: var(--color-success);
+}
+
+/* Поля ввода */
+.form-control {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background: linear-gradient(135deg, var(--color-input-bg) 0%, #fefefe 100%);
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  outline: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.form-control:hover {
+  border-color: var(--color-gray-400);
+}
+
+.form-control:focus {
+  border-color: var(--color-input-border-focus);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-gray-50) 100%);
+}
+
+.form-control:disabled,
+.form-control.readonly {
+  background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-control::placeholder {
+  color: var(--color-input-placeholder);
+  opacity: 1;
+}
+
+/* Размеры полей ввода */
+.form-control-sm {
+  height: 32px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.form-control-lg {
+  height: 48px;
+  padding: 10px 14px;
+  font-size: 16px;
+}
+
+/* Состояния валидации */
+.form-control.error {
+  border-color: var(--color-error);
+  background-image: linear-gradient(135deg, var(--color-error-bg) 0%, var(--color-white) 100%);
+}
+
+.form-control.error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.form-control.success {
+  border-color: var(--color-success);
+  background-image: linear-gradient(135deg, var(--color-success-bg) 0%, var(--color-white) 100%);
+}
+
+.form-control.success:focus {
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.form-control.warning {
+  border-color: var(--color-warning);
+  background-image: linear-gradient(135deg, var(--color-warning-bg) 0%, var(--color-white) 100%);
+}
+
+/* Текстовая область */
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.form-textarea-lg {
+  min-height: 150px;
+}
+
+/* Выбор файла */
+.form-file {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.form-file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.form-file-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, var(--color-input-bg) 0%, #fefefe 100%);
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  user-select: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.form-file-label:hover {
+  border-color: var(--color-gray-400);
+  background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-white) 100%);
+}
+
+.form-file-label:focus-within {
+  border-color: var(--color-input-border-focus);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-file-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 12px;
+}
+
+.form-file-button {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: var(--color-white);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Выбор */
+.form-select {
+  height: 40px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, var(--color-input-bg) 0%, #fefefe 100%);
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.form-select:hover {
+  border-color: var(--color-gray-400);
+}
+
+.form-select:focus {
+  border-color: var(--color-input-border-focus);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.form-select:disabled {
+  background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Чекбоксы и радиокнопки */
+.form-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.form-check-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.form-check-label {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+.form-check-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, var(--color-input-bg) 0%, #fefefe 100%);
+  border: 1px solid var(--color-input-border);
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.form-check-input:focus ~ .form-check-label::before {
+  border-color: var(--color-input-border-focus);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.form-check-input:checked ~ .form-check-label::before {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  border-color: var(--color-primary);
+}
+
+.form-check-label::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 12px;
+  border: solid var(--color-white);
+  border-width: 0 2px 2px 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.form-check-input:checked ~ .form-check-label::after {
+  transform: translateY(-50%) rotate(45deg);
+  opacity: 1;
+}
+
+/* Радиокнопки */
+.form-check-label.radio::before {
+  border-radius: 50%;
+}
+
+.form-check-label.radio::after {
+  left: 6px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--color-white);
+  border: none;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+/* Переключатели (Switches) */
+.form-switch {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.form-switch .form-check-input {
+  width: 44px;
+  height: 24px;
+  position: relative;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.form-switch .form-check-label {
+  padding-left: 52px;
+}
+
+.form-switch .form-check-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--color-gray-300) 0%, var(--color-gray-400) 100%);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.form-switch .form-check-label::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, var(--color-white) 0%, #fefefe 100%);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  border: none;
+  opacity: 1;
+}
+
+.form-switch .form-check-input:checked ~ .form-check-label::before {
+  background: linear-gradient(135deg, var(--color-success) 0%, #15803d 100%);
+}
+
+.form-switch .form-check-input:checked ~ .form-check-label::after {
+  transform: translateY(-50%) translateX(20px);
+}
+
+/* Группы ввода */
+.input-group {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.input-group > .form-control {
+  flex: 1;
+}
+
+.input-group > .form-control:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: none;
+}
+
+.input-group > .form-control:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group-addon {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  font-weight: 500;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.input-group-addon:first-child {
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group-addon:last-child {
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Форма в режиме inline */
+.form-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.form-inline .form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.form-inline .form-label {
+  margin-bottom: 0;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
+.form-inline .form-control {
+  width: auto;
+}
+
+/* Валидная форма */
+.form-group.error .form-label {
+  color: var(--color-error);
+}
+
+.form-group.error .form-control {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  background-image: linear-gradient(135deg, var(--color-error-bg) 0%, var(--color-white) 100%);
+}
+
+.form-group.success .form-control {
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+  background-image: linear-gradient(135deg, var(--color-success-bg) 0%, var(--color-white) 100%);
+}
+
+.error-message {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: var(--color-error);
+}
+
+.success-message {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: var(--color-success);
+}
+
+/* Кастомные элементы */
+.form-range {
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(135deg, var(--color-gray-300) 0%, var(--color-gray-400) 100%);
+  border-radius: 3px;
+  outline: none;
+  appearance: none;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+/* Дата и время */
+.form-control[type="date"],
+.form-control[type="datetime-local"],
+.form-control[type="month"],
+.form-control[type="time"] {
+  position: relative;
+}
+
+.form-control[type="date"]::-webkit-calendar-picker-indicator,
+.form-control[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.form-control[type="month"]::-webkit-calendar-picker-indicator,
+.form-control[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 4px;
+  filter: invert(0.5);
+  opacity: 0.6;
+}
+
+/* Цвет */
+.form-control[type="color"] {
+  height: 40px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+/* Скрытая метка для accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Группировка полей */
+.fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.legend {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  padding: 0 8px;
+  font-size: 1rem;
+}

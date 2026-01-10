@@ -1,0 +1,350 @@
+/* Стили для кнопок и элементов управления */
+@import url('colors.css');
+
+/* Базовый стиль кнопки */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  height: 40px;
+  min-width: 80px;
+}
+
+.btn:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.btn:disabled,
+.btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Размеры кнопок */
+.btn-sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.btn-lg {
+  height: 48px;
+  padding: 0 24px;
+  font-size: 16px;
+}
+
+/* Типы кнопок */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-button-primary-bg) 0%, var(--color-secondary) 100%);
+  color: var(--color-button-primary-text);
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-button-primary-hover) 0%, var(--color-secondary-dark) 100%);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.2);
+}
+
+.btn-primary:active:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-button-primary-hover) 0%, var(--color-secondary-dark) 100%);
+}
+
+.btn-secondary {
+  background-color: var(--color-button-secondary-bg);
+  color: var(--color-button-secondary-text);
+  border: 1px solid var(--color-button-secondary-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-button-secondary-hover) 0%, rgba(37, 99, 235, 0.1) 100%);
+  color: var(--color-secondary-dark);
+  border-color: var(--color-secondary-dark);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.05);
+}
+
+.btn-secondary:active:not(:disabled) {
+  background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(30, 64, 175, 0.05) 100%);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--color-button-danger-bg) 0%, #b91c1c 100%);
+  color: var(--color-button-danger-text);
+  border: none;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-button-danger-hover) 0%, #991b1b 100%);
+  box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3), 0 4px 6px -2px rgba(220, 38, 38, 0.2);
+}
+
+.btn-danger:active:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-button-danger-hover) 0%, #991b1b 100%);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--color-success) 0%, #15803d 100%);
+  color: var(--color-white);
+  border: none;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-success) 0%, #14532d 100%);
+  box-shadow: 0 10px 15px -3px rgba(22, 163, 74, 0.3), 0 4px 6px -2px rgba(22, 163, 74, 0.2);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, var(--color-warning) 0%, #d97706 100%);
+  color: var(--color-white);
+  border: none;
+}
+
+.btn-warning:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-warning) 0%, #b45309 100%);
+  box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.3), 0 4px 6px -2px rgba(245, 158, 11, 0.2);
+}
+
+.btn-info {
+  background: linear-gradient(135deg, var(--color-info) 0%, var(--color-secondary) 100%);
+  color: var(--color-white);
+  border: none;
+}
+
+.btn-info:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-info) 0%, var(--color-secondary-dark) 100%);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.2);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: none;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+  color: var(--color-primary);
+}
+
+/* Кнопки с иконками */
+.btn-icon {
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  gap: 0;
+}
+
+.btn-icon.btn-sm {
+  width: 32px;
+  height: 32px;
+}
+
+.btn-icon.btn-lg {
+  width: 48px;
+  height: 48px;
+}
+
+/* Группы кнопок */
+.btn-group {
+  display: inline-flex;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.btn-group .btn {
+  border-radius: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+.btn-group .btn:not(:last-child) {
+  border-right: 1px solid var(--color-gray-300);
+}
+
+.btn-group .btn:hover {
+  z-index: 1;
+}
+
+.btn-group .btn-primary,
+.btn-group .btn-danger,
+.btn-group .btn-success {
+  border-right-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Кнопки для действий в таблицах */
+.action-btn {
+  padding: 6px;
+  height: auto;
+  min-width: auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  background: linear-gradient(135deg, var(--color-gray-200) 0%, var(--color-gray-300) 100%);
+  color: var(--color-gray-600);
+  border: none;
+}
+
+.action-btn:hover {
+  background: linear-gradient(135deg, var(--color-gray-300) 0%, var(--color-gray-400) 100%);
+  color: var(--color-gray-800);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.action-btn-edit:hover {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: var(--color-white);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3), 0 2px 4px -1px rgba(37, 99, 235, 0.2);
+}
+
+.action-btn-delete:hover {
+  background: linear-gradient(135deg, var(--color-error) 0%, #b91c1c 100%);
+  color: var(--color-white);
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3), 0 2px 4px -1px rgba(220, 38, 38, 0.2);
+}
+
+.action-btn-view:hover {
+  background: linear-gradient(135deg, var(--color-info) 0%, var(--color-secondary) 100%);
+  color: var(--color-white);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3), 0 2px 4px -1px rgba(37, 99, 235, 0.2);
+}
+
+/* Кнопки для пагинации */
+.pagination {
+  display: flex;
+  list-style: none;
+  gap: 4px;
+}
+
+.page-item {
+  display: flex;
+}
+
+.page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-gray-50) 100%);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.page-link:hover {
+  background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+  color: var(--color-primary);
+  text-decoration: none;
+  border-color: var(--color-primary);
+}
+
+.page-item.active .page-link {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
+
+.page-item.disabled .page-link {
+  opacity: 0.6;
+  cursor: not-allowed;
+  color: var(--color-gray-400);
+  background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+}
+
+/* Кнопка загрузки */
+.btn-loading {
+  position: relative;
+  color: transparent !important;
+}
+
+.btn-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  margin-left: -8px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  color: white;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Кнопки для фильтров */
+.filter-btn {
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-gray-50) 100%);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  height: auto;
+  min-width: auto;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.filter-btn:hover {
+  background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+  color: var(--color-text-primary);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3), 0 2px 4px -1px rgba(37, 99, 235, 0.2);
+}
+
+/* Кнопки для закрытия */
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--color-gray-400);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  color: var(--color-error);
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+}

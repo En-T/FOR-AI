@@ -1,0 +1,366 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}Система управления школой{% endblock %}</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'css/colors.css' %}">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+  <link rel="stylesheet" href="{% static 'css/buttons.css' %}">
+  <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tables.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  {% block body %}
+  <!-- Alert Container -->
+  <div class="alert-container"></div>
+  
+  <!-- Mobile Sidebar Overlay -->
+  <div class="sidebar-overlay" aria-hidden="true"></div>
+  
+  <!-- Main App Wrapper -->
+  <div class="app-wrapper{% if request.COOKIES.sidebar_collapsed == 'true' %} sidebar-collapsed{% endif %}">
+    <!-- Navigation Bar -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <div class="navbar-left">
+        <button class="navbar-toggle d-block d-md-none" aria-label="Toggle navigation" aria-expanded="false">
+          <span class="navbar-toggle-icon">☰</span>
+        </button>
+        
+        <a href="{% url 'index' %}" class="navbar-brand">
+          <span class="navbar-brand-icon">🎓</span>
+          <span class="navbar-brand-text">Школа</span>
+        </a>
+        
+        <ul class="navbar-nav d-none d-lg-flex">
+          {% if user.is_authenticated %}
+            {% if user.role == 'admin' or user.is_superuser %}
+              <li class="navbar-nav-item">
+                <a href="{% url 'dashboard' %}" class="navbar-nav-link{% if request.resolver_match.url_name == 'dashboard' %} active{% endif %}">
+                  Панель управления
+                </a>
+              </li>
+              <li class="navbar-nav-item">
+                <a href="{% url 'users_list' %}" class="navbar-nav-link{% if 'users' in request.path %} active{% endif %}">
+                  Пользователи
+                </a>
+              </li>
+              <li class="navbar-nav-item">
+                <a href="{% url 'classes_list' %}" class="navbar-nav-link{% if 'classes' in request.path %} active{% endif %}">
+                  Классы
+                </a>
+              </li>
+            {% elif user.role == 'teacher' %}
+              <li class="navbar-nav-item">
+                <a href="{% url 'my_classes' %}" class="navbar-nav-link{% if 'classes' in request.path %} active{% endif %}">
+                  Мои классы
+                </a>
+              </li>
+              <li class="navbar-nav-item">
+                <a href="{% url 'grades' %}" class="navbar-nav-link{% if 'grades' in request.path %} active{% endif %}">
+                  Оценки
+                </a>
+              </li>
+            {% elif user.role == 'student' %}
+              <li class="navbar-nav-item">
+                <a href="{% url 'my_grades' %}" class="navbar-nav-link{% if 'grades' in request.path %} active{% endif %}">
+                  Мои оценки
+                </a>
+              </li>
+              <li class="navbar-nav-item">
+                <a href="{% url 'schedule' %}" class="navbar-nav-link{% if 'schedule' in request.path %} active{% endif %}">
+                  Расписание
+                </a>
+              </li>
+            {% endif %}
+          {% endif %}
+        </ul>
+      </div>
+      
+      <div class="navbar-right">
+        {% if user.is_authenticated %}
+          <div class="navbar-user-menu">
+            <div class="navbar-user-avatar">
+              {{ user.get_full_name|first|default:user.username|first|upper }}
+            </div>
+            <span class="navbar-user-name d-none d-md-inline">{{ user.get_full_name|default:user.username }}</span>
+            <i class="navbar-user-caret d-none d-md-inline">▼</i>
+          </div>
+          
+          <ul class="navbar-user-dropdown" style="display: none;">
+            <li>
+              <a href="{% url 'profile' %}">
+                <span class="icon">👤</span>
+                Профиль
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'settings' %}">
+                <span class="icon">⚙️</span>
+                Настройки
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="{% url 'logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <span class="icon">🚪</span>
+                Выйти
+              </a>
+            </li>
+          </ul>
+          
+          <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+            {% csrf_token %}
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-primary">Войти</a>
+        {% endif %}
+      </div>
+    </nav>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Sidebar navigation" aria-hidden="true">
+      <div class="sidebar-header">
+        <h3 class="sidebar-title">Меню</h3>
+        <button class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+          <span>◀</span>
+        </button>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          {% if user.is_authenticated %}
+            {% if user.role == 'admin' or user.is_superuser %}
+              <li class="sidebar-nav-item">
+                <a href="{% url 'dashboard' %}" class="sidebar-nav-link{% if request.resolver_match.url_name == 'dashboard' %} active{% endif %}">
+                  <span class="sidebar-nav-icon">📊</span>
+                  <span class="sidebar-nav-text">Панель управления</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'users_list' %}" class="sidebar-nav-link{% if 'users' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">👥</span>
+                  <span class="sidebar-nav-text">Пользователи</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'classes_list' %}" class="sidebar-nav-link{% if 'classes' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">🏫</span>
+                  <span class="sidebar-nav-text">Классы</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'subjects_list' %}" class="sidebar-nav-link{% if 'subjects' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">📚</span>
+                  <span class="sidebar-nav-text">Предметы</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'teachers_list' %}" class="sidebar-nav-link{% if 'teachers' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">👨‍🏫</span>
+                  <span class="sidebar-nav-text">Учителя</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'students_list' %}" class="sidebar-nav-link{% if 'students' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">👨‍🎓</span>
+                  <span class="sidebar-nav-text">Ученики</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'grades' %}" class="sidebar-nav-link{% if 'grades' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">✅</span>
+                  <span class="sidebar-nav-text">Оценки</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'schedule' %}" class="sidebar-nav-link{% if 'schedule' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">📅</span>
+                  <span class="sidebar-nav-text">Расписание</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'reports' %}" class="sidebar-nav-link{% if 'reports' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">📈</span>
+                  <span class="sidebar-nav-text">Отчеты</span>
+                </a>
+              </li>
+            {% elif user.role == 'teacher' %}
+              <li class="sidebar-nav-item">
+                <a href="{% url 'my_classes' %}" class="sidebar-nav-link{% if 'classes' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">🏫</span>
+                  <span class="sidebar-nav-text">Мои классы</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'my_students' %}" class="sidebar-nav-link{% if 'students' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">👨‍🎓</span>
+                  <span class="sidebar-nav-text">Мои ученики</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'grades' %}" class="sidebar-nav-link{% if 'grades' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">✅</span>
+                  <span class="sidebar-nav-text">Оценки</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'schedule' %}" class="sidebar-nav-link{% if 'schedule' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">📅</span>
+                  <span class="sidebar-nav-text">Расписание</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'teacher_reports' %}" class="sidebar-nav-link{% if 'reports' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">📈</span>
+                  <span class="sidebar-nav-text">Мои отчеты</span>
+                </a>
+              </li>
+            {% elif user.role == 'student' %}
+              <li class="sidebar-nav-item">
+                <a href="{% url 'my_grades' %}" class="sidebar-nav-link{% if 'grades' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">✅</span>
+                  <span class="sidebar-nav-text">Мои оценки</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'schedule' %}" class="sidebar-nav-link{% if 'schedule' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">📅</span>
+                  <span class="sidebar-nav-text">Расписание</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'my_class' %}" class="sidebar-nav-link{% if 'class' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">🏫</span>
+                  <span class="sidebar-nav-text">Мой класс</span>
+                </a>
+              </li>
+              <li class="sidebar-nav-item">
+                <a href="{% url 'homework' %}" class="sidebar-nav-link{% if 'homework' in request.path %} active{% endif %}">
+                  <span class="sidebar-nav-icon">📝</span>
+                  <span class="sidebar-nav-text">Домашние задания</span>
+                </a>
+              </li>
+            {% endif %}
+          {% endif %}
+        </ul>
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content" role="main">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb-bar">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="{% url 'index' %}" class="breadcrumb-link">Главная</a>
+            </li>
+            {% block breadcrumb %}{% endblock %}
+            <li class="breadcrumb-item active" aria-current="page">{% block page_title %}{% endblock %}</li>
+          </ol>
+        </nav>
+      </div>
+      
+      <!-- Page Header -->
+      <div class="section-header">
+        <h1 class="section-title">{% block page_title %}{% endblock %}</h1>
+        <div class="section-actions">
+          {% block page_actions %}{% endblock %}
+        </div>
+      </div>
+      
+      <!-- Messages -->
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+              <div class="alert-content">
+                <span class="alert-icon">
+                  {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}✓
+                  {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}✗
+                  {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}⚠
+                  {% else %}ℹ{% endif %}
+                </span>
+                <div class="alert-text">{{ message }}</div>
+              </div>
+              <button type="button" class="close-btn" data-dismiss="alert" aria-label="Закрыть">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      <!-- Page Content -->
+      {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>&copy; 2024 Система управления школой. Все права защищены.</p>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- JavaScript -->
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/utils.js' %}"></script>
+  <script src="{% static 'js/forms.js' %}"></script>
+  <script src="{% static 'js/tables.js' %}"></script>
+  <script src="{% static 'js/modals.js' %}"></script>
+  <script src="{% static 'js/transfer-box.js' %}"></script>
+  
+  <script>
+    // Initialize app
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize user dropdown
+      const userMenu = document.querySelector('.navbar-user-menu');
+      if (userMenu) {
+        userMenu.addEventListener('click', function(e) {
+          e.preventDefault();
+          const dropdown = document.querySelector('.navbar-user-dropdown');
+          if (dropdown) {
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      }
+      
+      // Close dropdown on outside click
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.navbar-user-menu')) {
+          const dropdown = document.querySelector('.navbar-user-dropdown');
+          if (dropdown) {
+            dropdown.style.display = 'none';
+          }
+        }
+      });
+      
+      // Auto-dismiss alerts
+      document.querySelectorAll('.alert-dismissible').forEach(alert => {
+        setTimeout(() => {
+          alert.style.opacity = '0';
+          setTimeout(() => alert.remove(), 300);
+        }, 5000);
+      });
+    });
+  </script>
+  
+  {% block extra_js %}{% endblock %}
+  {% endblock body %}
+</body>
+</html>

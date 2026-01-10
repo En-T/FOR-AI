@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Вход в систему - Система управления школой{% endblock %}
+
+{% block body_class %}login-page{% endblock %}
+
+{% block body %}
+<div class="login-wrapper">
+  <div class="login-container">
+    <!-- Login Card -->
+    <div class="card login-card">
+      <div class="card-header text-center">
+        <div class="login-logo">🎓</div>
+        <h2 class="login-title">Система управления школой</h2>
+        <p class="login-subtitle">Войдите в свою учетную запись</p>
+      </div>
+      
+      <div class="card-body">
+        {% if form.errors %}
+          <div class="alert alert-error">
+            <div class="alert-content">
+              <span class="alert-icon">✗</span>
+              <div class="alert-text">
+                <strong>Ошибка входа!</strong><br>
+                Введен неверный логин или пароль.
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        
+        <form method="post" action="{% url 'login' %}" class="form-login" data-validate>
+          {% csrf_token %}
+          
+          <div class="form-group">
+            <label for="id_username" class="form-label">
+              Логин или Email<span class="required">*</span>
+            </label>
+            <input type="text" 
+                   name="username" 
+                   id="id_username" 
+                   class="form-control form-control-lg" 
+                   placeholder="Введите логин или email"
+                   required 
+                   autofocus>
+          </div>
+          
+          <div class="form-group">
+            <label for="id_password" class="form-label">
+              Пароль<span class="required">*</span>
+            </label>
+            <div class="input-group">
+              <input type="password" 
+                     name="password" 
+                     id="id_password" 
+                     class="form-control form-control-lg" 
+                     placeholder="Введите пароль"
+                     required
+                     minlength="8">
+              <div class="input-group-addon password-toggle" data-target="id_password">
+                <span class="password-toggle-icon">👁️</span>
+              </div>
+            </div>
+            <small class="form-text">
+              <a href="{% url 'password_reset' %}" class="text-muted">Забыли пароль?</a>
+            </small>
+          </div>
+          
+          <div class="form-group">
+            <div class="form-check">
+              <input type="checkbox" name="remember" id="id_remember" class="form-check-input">
+              <label for="id_remember" class="form-check-label">Запомнить меня</label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
+              Войти в систему
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="card-footer">
+        <div class="login-help">
+          <p class="text-center mb-2">
+            <small class="text-muted">Нет учетной записи?</small>
+          </p>
+          <a href="{% url 'register' %}" class="btn btn-secondary btn-block">
+            Зарегистрироваться
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Features -->
+    <div class="login-features">
+      <div class="feature-item">
+        <div class="feature-icon">🔒</div>
+        <h4>Безопасность</h4>
+        <p>Все данные защищены современными методами шифрования</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">📱</div>
+        <h4>Мобильность</h4>
+        <p>Работайте с системой на любом устройстве</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">⚡</div>
+        <h4>Быстрота</h4>
+        <p>Мгновенный доступ к необходимой информации</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .login-page {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f4 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .login-wrapper {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .login-container {
+    width: 100%;
+  }
+  
+  .login-card {
+    border: none;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+  }
+  
+  .login-card .card-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+    border-bottom: none;
+    padding: 2rem;
+  }
+  
+  .login-logo {
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .login-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0;
+  }
+  
+  .login-card .card-body {
+    padding: 2rem;
+  }
+  
+  .login-card .card-footer {
+    background: var(--color-gray-50);
+    border-top: 1px solid var(--color-border);
+    padding: 1.5rem 2rem;
+  }
+  
+  .password-toggle {
+    cursor: pointer;
+    min-width: 40px;
+  }
+  
+  .password-toggle:hover {
+    background: var(--color-gray-200);
+  }
+  
+  .login-features {
+    margin-top: 2rem;
+    display: none;
+  }
+  
+  .feature-item {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .feature-item h4 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .feature-item p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  
+  @media (min-width: 768px) {
+    .login-wrapper {
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    
+    .login-features {
+      display: block;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .login-wrapper {
+      padding: 0;
+    }
+    
+    .login-card .card-header {
+      padding: 1.5rem;
+    }
+    
+    .login-card .card-body {
+      padding: 1.5rem;
+    }
+    
+    .login-title {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize password toggle
+    document.querySelectorAll('.password-toggle').forEach(toggle => {
+      toggle.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        const icon = this.querySelector('.password-toggle-icon');
+        
+        if (input && icon) {
+          const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+          input.setAttribute('type', type);
+          icon.textContent = type === 'password' ? '👁️' : '🙈';
+        }
+      });
+    });
+    
+    // Focus on first field
+    const firstInput = document.querySelector('#id_username');
+    if (firstInput) {
+      firstInput.focus();
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+/* Палитра цветов для системы управления школой */
+
+:root {
+  /* Основные цвета */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #3b82f6;
+  
+  --color-secondary: #1e40af;
+  --color-secondary-dark: #1e3a8a;
+  --color-secondary-light: #3b82f6;
+  
+  /* Семантические цвета */
+  --color-success: #16a34a;
+  --color-success-bg: #dcfce7;
+  --color-success-border: #bbf7d0;
+  
+  --color-error: #dc2626;
+  --color-error-bg: #fef2f2;
+  --color-error-border: #fecaca;
+  
+  --color-warning: #f59e0b;
+  --color-warning-bg: #fffbeb;
+  --color-warning-border: #fec84b;
+  
+  --color-info: #2563eb;
+  --color-info-bg: #eff6ff;
+  --color-info-border: #bfdbfe;
+  
+  /* Нейтральные цвета */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  
+  /* Специфические цвета */
+  --color-background: var(--color-gray-50);
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-muted: var(--color-gray-500);
+  --color-border: var(--color-gray-200);
+  --color-border-light: var(--color-gray-100);
+  --color-border-dark: var(--color-gray-300);
+  
+  /* Цвета для компонентов */
+  --color-card-bg: var(--color-white);
+  --color-card-border: var(--color-border);
+  --color-card-shadow: rgba(0, 0, 0, 0.1);
+  
+  --color-input-bg: var(--color-white);
+  --color-input-border: var(--color-border-dark);
+  --color-input-border-focus: var(--color-primary);
+  --color-input-placeholder: var(--color-gray-400);
+  
+  --color-button-primary-bg: var(--color-primary);
+  --color-button-primary-text: var(--color-white);
+  --color-button-primary-hover: var(--color-primary-dark);
+  
+  --color-button-secondary-bg: transparent;
+  --color-button-secondary-text: var(--color-primary);
+  --color-button-secondary-border: var(--color-primary);
+  --color-button-secondary-hover: var(--color-gray-50);
+  
+  --color-button-danger-bg: var(--color-error);
+  --color-button-danger-text: var(--color-white);
+  --color-button-danger-hover: #b91c1c;
+  
+  --color-table-header-bg: var(--color-gray-50);
+  --color-table-row-hover: var(--color-gray-50);
+  --color-table-row-striped: var(--color-gray-50);
+  
+  /* Цвета для навигации */
+  --color-navbar-bg: var(--color-white);
+  --color-navbar-text: var(--color-gray-700);
+  --color-navbar-text-active: var(--color-primary);
+  --color-navbar-border: var(--color-border);
+  
+  --color-sidebar-bg: var(--color-white);
+  --color-sidebar-text: var(--color-gray-700);
+  --color-sidebar-text-active: var(--color-primary);
+  --color-sidebar-border: var(--color-border);
+  --color-sidebar-item-hover: var(--color-gray-50);
+  
+  --color-footer-bg: var(--color-gray-100);
+  --color-footer-text: var(--color-gray-600);
+}

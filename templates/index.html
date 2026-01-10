@@ -1,0 +1,620 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Главная - Система управления школой{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">Главная</li>
+{% endblock %}
+
+{% block page_title %}Главная{% endblock %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+  <!-- Welcome Page for Non-Authenticated Users -->
+  <div class="welcome-page">
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">Система управления школой</h1>
+        <p class="hero-subtitle">
+          Современное решение для управления учебным процессом: учет студентов, 
+          оценки, расписания, отчеты и многое другое.
+        </p>
+        <div class="hero-actions">
+          <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+            Войти в систему
+          </a>
+          <a href="{% url 'register' %}" class="btn btn-secondary btn-lg">
+            Зарегистрироваться
+          </a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-illustration">🎓</div>
+      </div>
+    </div>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h3>Управление пользователями</h3>
+        <p>Легкое управление учениками, учителями и администраторами</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <h3>Учебные материалы</h3>
+        <p>Управление предметами, классами и расписанием занятий</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Оценки и отчеты</h3>
+        <p>Полноценная система оценивания и генерации отчетов</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>Мобильная версия</h3>
+        <p>Работайте с системой на любом устройстве и в любом месте</p>
+      </div>
+    </div>
+    
+    <div class="stats-section">
+      <h2>Статистика системы</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Студентов</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Учителей</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">30+</div>
+          <div class="stat-label">Предметов</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1000+</div>
+          <div class="stat-label">Оценок</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% else %}
+  <!-- Dashboard for Authenticated Users -->
+  <div class="dashboard">
+    <!-- Stats Cards -->
+    <div class="content-grid mb-4">
+      {% if user.role == 'admin' or user.is_superuser %}
+        <div class="stat-card stat-card-blue">
+          <div class="stat-icon">👥</div>
+          <h3 class="stat-title">Всего студентов</h3>
+          <div class="stat-number">{% if stats %}{{ stats.total_students|default:0 }}{% else %}0{% endif %}</div>
+          <div class="stat-change stat-change-up">
+            +12% с прошлого месяца
+          </div>
+        </div>
+        
+        <div class="stat-card stat-card-green">
+          <div class="stat-icon">👨‍🏫</div>
+          <h3 class="stat-title">Учителей</h3>
+          <div class="stat-number">{% if stats %}{{ stats.total_teachers|default:0 }}{% else %}0{% endif %}</div>
+          <div class="stat-change stat-change-up">
+            +5% с прошлого месяца
+          </div>
+        </div>
+        
+        <div class="stat-card stat-card-orange">
+          <div class="stat-icon">🏫</div>
+          <h3 class="stat-title">Классов</h3>
+          <div class="stat-number">{% if stats %}{{ stats.total_classes|default:0 }}{% else %}0{% endif %}</div>
+          <div class="stat-change">без изменений</div>
+        </div>
+        
+        <div class="stat-card stat-card-purple">
+          <div class="stat-icon">📊</div>
+          <h3 class="stat-title">Средний балл</h3>
+          <div class="stat-number">{% if stats %}{{ stats.average_grade|default:"0.0" }}{% else %}0.0{% endif %}</div>
+          <div class="stat-change stat-change-up">
+            +0.2 с прошлого месяца
+          </div>
+        </div>
+      
+      {% elif user.role == 'teacher' %}
+        <div class="stat-card stat-card-blue">
+          <div class="stat-icon">🏫</div>
+          <h3 class="stat-title">Мои классы</h3>
+          <div class="stat-number">{% if stats %}{{ stats.total_classes|default:0 }}{% else %}0{% endif %}</div>
+          <div class="stat-change">
+            активных
+          </div>
+        </div>
+        
+        <div class="stat-card stat-card-green">
+          <div class="stat-icon">👨‍🎓</div>
+          <h3 class="stat-title">Мои студенты</h3>
+          <div class="stat-number">{% if stats %}{{ stats.total_students|default:0 }}{% else %}0{% endif %}</div>
+          <div class="stat-change">
+            в классах
+          </div>
+        </div>
+        
+        <div class="stat-card stat-card-orange">
+          <div class="stat-icon">📚</div>
+          <h3 class="stat-title">Предметов</h3>
+          <div class="stat-number">{% if stats %}{{ stats.total_subjects|default:0 }}{% else %}0{% endif %}</div>
+          <div class="stat-change">
+            преподаю
+          </div>
+        </div>
+        
+        <div class="stat-card stat-card-purple">
+          <div class="stat-icon">📊</div>
+          <h3 class="stat-title">Средний балл</h3>
+          <div class="stat-number">{% if stats %}{{ stats.average_grade|default:"0.0" }}{% else %}0.0{% endif %}</div>
+          <div class="stat-change">
+            у студентов
+          </div>
+        </div>
+      
+      {% elif user.role == 'student' %}
+        <div class="stat-card stat-card-blue">
+          <div class="stat-icon">📊</div>
+          <h3 class="stat-title">Средний балл</h3>
+          <div class="stat-number">{% if stats %}{{ stats.average_grade|default:"0.0" }}{% else %}0.0{% endif %}</div>
+          <div class="stat-change">
+            {% if stats %}{% if stats.average_grade >= 4.0 %}Отлично!{% elif stats.average_grade >= 3.0 %}Хорошо{% else %}Можно лучше{% endif %}{% endif %}
+          </div>
+        </div>
+        
+        <div class="stat-card stat-card-green">
+          <div class="stat-icon">✅</div>
+          <h3 class="stat-title">Оценок</h3>
+          <div class="stat-number">{% if stats %}{{ stats.total_grades|default:0 }}{% else %}0{% endif %}</div>
+          <div class="stat-change">
+            поставлено
+          </div>
+        </div>
+        
+        <div class="stat-card stat-card-orange">
+          <div class="stat-icon">📚</div>
+          <h3 class="stat-title">Предметов</h3>
+          <div class="stat-number">{% if stats %}{{ stats.total_subjects|default:0 }}{% else %}0{% endif %}</div>
+          <div class="stat-change">
+            изучаю
+          </div>
+        </div>
+        
+        <div class="stat-card stat-card-purple">
+          <div class="stat-icon">📅</div>
+          <h3 class="stat-title">Занятий сегодня</h3>
+          <div class="stat-number">{% if stats %}{{ stats.classes_today|default:0 }}{% else %}0{% endif %}</div>
+          <div class="stat-change">
+            в расписании
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    
+    <!-- Recent Activity -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Последняя активность</h3>
+      </div>
+      <div class="card-body">
+        {% if recent_activity %}
+          <ul class="activity-list">
+            {% for activity in recent_activity %}
+              <li class="activity-item">
+                <div class="activity-icon">{{ activity.icon }}</div>
+                <div class="activity-content">
+                  <p class="activity-text">{{ activity.text }}</p>
+                  <small class="activity-time">{{ activity.time|timesince }} назад</small>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="text-center text-muted p-4">
+            <div class="mb-3">📋</div>
+            <p>Нет недавней активности</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    {% if user.is_authenticated %}
+    <div class="card mt-4">
+      <div class="card-header">
+        <h3 class="card-title">Быстрые действия</h3>
+      </div>
+      <div class="card-body">
+        <div class="content-grid">
+          {% if user.role == 'admin' or user.is_superuser %}
+            <a href="{% url 'student_create' %}" class="action-card">
+              <div class="action-icon">➕</div>
+              <h4>Добавить студента</h4>
+              <p>Создать новую учетную запись студента</p>
+            </a>
+            
+            <a href="{% url 'teacher_create' %}" class="action-card">
+              <div class="action-icon">➕</div>
+              <h4>Добавить учителя</h4>
+              <p>Добавить нового учителя в систему</p>
+            </a>
+            
+            <a href="{% url 'class_create' %}" class="action-card">
+              <div class="action-icon">🏫</div>
+              <h4>Создать класс</h4>
+              <p>Добавить новый класс</p>
+            </a>
+            
+            <a href="{% url 'grade_add_bulk' %}" class="action-card">
+              <div class="action-icon">✅</div>
+              <h4>Поставить оценки</h4>
+              <p>Массовое добавление оценок</p>
+            </a>
+            
+          {% elif user.role == 'teacher' %}
+            <a href="{% url 'grade_add' %}" class="action-card">
+              <div class="action-icon">✅</div>
+              <h4>Поставить оценки</h4>
+              <p>Добавить оценки своим студентам</p>
+            </a>
+            
+            <a href="{% url 'homework_create' %}", class="action-card">
+              <div class="action-icon">📝</div>
+              <h4>Добавить ДЗ</h4>
+              <p>Задать домашнее задание</p>
+            </a>
+            
+            <a href="{% url 'attendance' %}" class="action-card">
+              <div class="action-icon">📋</div>
+              <h4>Посещаемость</h4>
+              <p>Отметить посещаемость</p>
+            </a>
+            
+          {% elif user.role == 'student' %}
+            <a href="{% url 'my_grades' %}" class="action-card">
+              <div class="action-icon">📊</div>
+              <h4>Мои оценки</h4>
+              <p>Просмотр моих текущих оценок</p>
+            </a>
+            
+            <a href="{% url 'homework' %}" class="action-card">
+              <div class="action-icon">📝</div>
+              <h4>Домашние задания</h4>
+              <p>Посмотреть задания</p>
+            </a>
+            
+            <a href="{% url 'schedule' %}" class="action-card">
+              <div class="action-icon">📅</div>
+              <h4>Расписание</h4>
+              <p>Мое расписание занятий</p>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  /* Welcome Page Styles */
+  .welcome-page {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .hero-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding: 3rem 0;
+  }
+  
+  .hero-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .hero-illustration {
+    font-size: 15rem;
+    text-align: center;
+    line-height: 1;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+  
+  .feature-card {
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--color-white) 0%, #fefefe 100%);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-card h3 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .feature-card p {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+  
+  .stats-section {
+    text-align: center;
+    margin: 3rem 0;
+  }
+  
+  .stats-section h2 {
+    margin-bottom: 2rem;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+  
+  .stat-card {
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--color-white) 0%, #fefefe 100%);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--color-border);
+  }
+  
+  .stat-number {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1;
+  }
+  
+  .stat-label {
+    color: var(--color-text-secondary);
+    margin-top: 0.5rem;
+  }
+  
+  /* Dashboard Styles */
+  .dashboard .content-grid {
+    gap: 1.5rem;
+  }
+  
+  .stat-card {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--color-white) 0%, #fefefe 100%);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--color-primary);
+  }
+  
+  .stat-card.stat-card-blue::before {
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  }
+  
+  .stat-card.stat-card-green::before {
+    background: linear-gradient(90deg, var(--color-success) 0%, #15803d 100%);
+  }
+  
+  .stat-card.stat-card-orange::before {
+    background: linear-gradient(90deg, var(--color-warning) 0%, #d97706 100%);
+  }
+  
+  .stat-card.stat-card-purple::before {
+    background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
+  }
+  
+  .stat-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat-title {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .stat-number {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    line-height: 1;
+  }
+  
+  .stat-change {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .stat-change-up::before {
+    content: '↑';
+    color: var(--color-success);
+  }
+  
+  .stat-change-down::before {
+    content: '↓';
+    color: var(--color-error);
+  }
+  
+  .activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .activity-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    align-items: center;
+  }
+  
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+  
+  .activity-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  
+  .activity-content {
+    flex: 1;
+  }
+  
+  .activity-text {
+    margin: 0 0 0.25rem 0;
+    color: var(--color-text-primary);
+  }
+  
+  .activity-time {
+    color: var(--color-text-muted);
+  }
+  
+  .action-card {
+    display: block;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--color-white) 0%, #fefefe 100%);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+  
+  .action-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+  }
+  
+  .action-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+  }
+  
+  .action-card h4 {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary);
+  }
+  
+  .action-card:hover h4 {
+    color: var(--color-primary);
+  }
+  
+  .action-card p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+  
+  @media (max-width: 767px) {
+    .hero-section {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2rem;
+    }
+    
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-illustration {
+      font-size: 8rem;
+    }
+    
+    .hero-actions {
+      justify-content: center;
+    }
+    
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .dashboard .content-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .stats-grid,
+    .dashboard .content-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endif %}
+{% endblock %}
