@@ -1,0 +1,31 @@
+{% extends 'school_admin/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">Панель администратора школы</h1>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h2 class="h5">{{ school.name }}</h2>
+    <div class="text-muted">Директор: {{ school.principal|default:'—' }}</div>
+    <div class="text-muted">Выпускной класс: {{ school.graduation_class|default:'—' }}</div>
+    <div class="text-muted">Расположение: {{ school.location|default:'—' }}</div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3"><div class="card"><div class="card-body"><div class="text-muted">Классы</div><div class="fs-3">{{ classes_count }}</div></div></div></div>
+  <div class="col-6 col-lg-3"><div class="card"><div class="card-body"><div class="text-muted">Учащиеся</div><div class="fs-3">{{ students_count }}</div></div></div></div>
+  <div class="col-6 col-lg-3"><div class="card"><div class="card-body"><div class="text-muted">Учителя</div><div class="fs-3">{{ teachers_count }}</div></div></div></div>
+  <div class="col-6 col-lg-3"><div class="card"><div class="card-body"><div class="text-muted">Предметы</div><div class="fs-3">{{ subjects_count }}</div></div></div></div>
+</div>
+
+<h2 class="h5">Быстрая навигация</h2>
+<div class="d-flex gap-2 flex-wrap">
+  <a class="btn btn-primary" href="{% url 'school_admin:class_list' %}">Классы</a>
+  <a class="btn btn-primary" href="{% url 'school_admin:teacher_list' %}">Учителя</a>
+  <a class="btn btn-primary" href="{% url 'school_admin:student_list' %}">Учащиеся</a>
+  <a class="btn btn-outline-secondary" href="{% url 'school_admin:profile' %}">Профиль</a>
+</div>
+{% endblock %}

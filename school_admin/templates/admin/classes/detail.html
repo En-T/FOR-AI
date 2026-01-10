@@ -1,0 +1,79 @@
+{% extends 'school_admin/base.html' %}
+
+{% block title %}Класс {{ object.name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Класс: {{ object.name }}</h1>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-primary" href="{% url 'school_admin:class_update' pk=object.pk %}">Редактировать</a>
+    <a class="btn btn-outline-danger" href="{% url 'school_admin:class_delete' pk=object.pk %}">Удалить</a>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="text-muted">Школа</div><div class="fs-5">{{ object.school.name }}</div></div></div></div>
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="text-muted">Учащихся</div><div class="fs-5">{{ students_count }}</div></div></div></div>
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="text-muted">Средний балл (класс)</div><div class="fs-5">{% if class_avg %}{{ class_avg|floatformat:2 }}{% else %}—{% endif %}</div></div></div></div>
+</div>
+
+<div class="d-flex gap-2 mb-3 flex-wrap">
+  <a class="btn btn-primary" href="{% url 'school_admin:class_add_student' pk=object.pk %}">Добавить учащегося</a>
+  <a class="btn btn-outline-secondary" href="{% url 'school_admin:class_gradebook' pk=object.pk %}">Журнал</a>
+  <a class="btn btn-outline-primary" href="{% url 'school_admin:assignment_create' pk=object.pk %}">Назначить учителя</a>
+</div>
+
+<h2 class="h5">Учащиеся</h2>
+<table class="table table-sm table-striped">
+  <thead>
+    <tr>
+      <th>ФИ</th>
+      <th>Средний балл</th>
+      <th>Действия</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in students %}
+      <tr>
+        <td><a href="{% url 'school_admin:student_detail' pk=row.obj.pk %}">{{ row.obj.full_name }}</a></td>
+        <td>{% if row.avg %}{{ row.avg|floatformat:2 }}{% else %}—{% endif %}</td>
+        <td>
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'school_admin:student_update' pk=row.obj.pk %}">Редактировать</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'school_admin:student_delete' pk=row.obj.pk %}">Удалить</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="3" class="text-muted">Нет учащихся</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2 class="h5 mt-4">Назначение учителей</h2>
+<table class="table table-sm table-striped">
+  <thead>
+    <tr>
+      <th>Предмет</th>
+      <th>Учитель</th>
+      <th>Уровень</th>
+      <th>Подгруппа (учащихся)</th>
+      <th>Действия</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for a in assignments %}
+      <tr>
+        <td>{{ a.subject.name }}</td>
+        <td><a href="{% url 'school_admin:teacher_detail' pk=a.teacher.pk %}">{{ a.teacher.full_name }}</a></td>
+        <td>{{ a.get_study_level_display }}</td>
+        <td>{{ a.student_count }}</td>
+        <td>
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'school_admin:assignment_update' pk=object.pk assignment_id=a.pk %}">Редактировать</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'school_admin:assignment_delete' pk=object.pk assignment_id=a.pk %}">Удалить</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" class="text-muted">Пока нет назначений</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

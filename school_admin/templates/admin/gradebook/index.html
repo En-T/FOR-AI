@@ -1,0 +1,120 @@
+{% extends 'school_admin/base.html' %}
+
+{% block title %}Журнал — {{ school_class.name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Журнал: {{ school_class.name }}</h1>
+  <a class="btn btn-link" href="{% url 'school_admin:class_detail' pk=school_class.pk %}">← Назад к классу</a>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-sm align-middle">
+    <thead>
+      <tr>
+        <th rowspan="2">Учащийся</th>
+        {% for a in assignments %}
+          <th colspan="{{ quarters|length }}">
+            {{ a.subject.name }} ({{ a.get_study_level_display }})<br>
+            <span class="text-muted">{{ a.teacher.full_name }}</span>
+          </th>
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for a in assignments %}
+          {% for q in quarters %}
+            <th>{{ q.label }}</th>
+          {% endfor %}
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+        <tr>
+          <td>{{ r.student.full_name }}</td>
+          {% for cell in r.cells %}
+            {% for item in cell.values %}
+              <td>
+                <input
+                  class="form-control form-control-sm grade-input"
+                  data-student-id="{{ r.student.pk }}"
+                  data-assignment-id="{{ cell.assignment.pk }}"
+                  data-quarter="{{ item.quarter.value }}"
+                  value="{% if item.grade %}{{ item.grade }}{% endif %}"
+                  {% if not item.enabled %}disabled{% endif %}
+                />
+              </td>
+            {% endfor %}
+          {% endfor %}
+        </tr>
+      {% empty %}
+        <tr><td colspan="2" class="text-muted">Нет учащихся</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<p class="text-muted">Оценки: 1–10. Пустое значение допускается.</p>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  function colorize(input) {
+    input.classList.remove('grade-1-2', 'grade-3-4', 'grade-5p');
+    const v = parseInt(input.value, 10);
+    if (Number.isNaN(v)) return;
+    if (v <= 2) input.classList.add('grade-1-2');
+    else if (v <= 4) input.classList.add('grade-3-4');
+    else input.classList.add('grade-5p');
+  }
+
+  document.querySelectorAll('.grade-input').forEach((input) => {
+    colorize(input);
+    if (input.disabled) return;
+
+    input.addEventListener('blur', async () => {
+      const grade = input.value.trim();
+      if (grade !== '') {
+        const v = parseInt(grade, 10);
+        if (Number.isNaN(v) || v < 1 || v > 10) {
+          input.classList.add('is-invalid');
+          return;
+        }
+      }
+      input.classList.remove('is-invalid');
+
+      const payload = {
+        student_id: input.dataset.studentId,
+        assignment_id: input.dataset.assignmentId,
+        quarter: input.dataset.quarter,
+        grade: grade,
+      };
+
+      const res = await fetch('{% url "school_admin:gradebook_save" %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data || data.status !== 'success') {
+        input.classList.add('is-invalid');
+        return;
+      }
+
+      colorize(input);
+    });
+  });
+})();
+</script>
+{% endblock %}

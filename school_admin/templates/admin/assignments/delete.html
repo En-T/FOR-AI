@@ -1,0 +1,19 @@
+{% extends 'school_admin/base.html' %}
+
+{% block title %}Удаление назначения{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">Удалить назначение</h1>
+
+<div class="alert alert-warning">
+  Вы уверены, что хотите удалить назначение:
+  <strong>{{ assignment.subject.name }} — {{ assignment.teacher.full_name }} ({{ assignment.get_study_level_display }})</strong>?
+  <div class="text-muted">Будут удалены связанные подгруппы и оценки.</div>
+</div>
+
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger" type="submit">Удалить</button>
+  <a class="btn btn-link" href="{% url 'school_admin:class_detail' pk=school_class.pk %}">Отмена</a>
+</form>
+{% endblock %}

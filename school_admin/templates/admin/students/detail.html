@@ -1,0 +1,49 @@
+{% extends 'school_admin/base.html' %}
+
+{% block title %}Учащийся {{ object.full_name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">{{ object.full_name }}</h1>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-primary" href="{% url 'school_admin:student_update' pk=object.pk %}">Редактировать</a>
+    <a class="btn btn-outline-danger" href="{% url 'school_admin:student_delete' pk=object.pk %}">Удалить</a>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="text-muted">Класс</div><div class="fs-5">{{ school_class.name }}</div></div></div></div>
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="text-muted">Школа</div><div class="fs-5">{{ school.name }}</div></div></div></div>
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="text-muted">Средний балл</div><div class="fs-5">{% if avg %}{{ avg|floatformat:2 }}{% else %}—{% endif %}</div></div></div></div>
+</div>
+
+<h2 class="h5">Оценки по четвертям</h2>
+<table class="table table-sm table-striped">
+  <thead>
+    <tr>
+      <th>Предмет</th>
+      <th>Учитель</th>
+      <th>Уровень</th>
+      {% for q in quarters %}
+        <th>{{ q.label }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>{{ r.assignment.subject.name }}</td>
+        <td>{{ r.assignment.teacher.full_name }}</td>
+        <td>{{ r.assignment.get_study_level_display }}</td>
+        {% for g in r.grades %}
+          <td>{% if g %}{{ g }}{% else %}—{% endif %}</td>
+        {% endfor %}
+      </tr>
+    {% empty %}
+      <tr><td colspan="10" class="text-muted">Нет данных</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p class="text-muted">Редактирование оценок выполняется в журнале класса.</p>
+{% endblock %}

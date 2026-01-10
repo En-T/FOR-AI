@@ -1,0 +1,31 @@
+{% extends 'school_admin/base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">Профиль администратора</h1>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h2 class="h5">Пользователь</h2>
+    <div><strong>ФИ:</strong> {{ request.user.get_full_name|default:'—' }}</div>
+    <div><strong>Email:</strong> {{ request.user.email|default:'—' }}</div>
+    <div><strong>Username:</strong> {{ request.user.username }}</div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h2 class="h5">Школа</h2>
+    <div><strong>Название:</strong> {{ school.name }}</div>
+    <div><strong>Директор:</strong> {{ school.principal|default:'—' }}</div>
+    <div><strong>Выпускной класс:</strong> {{ school.graduation_class|default:'—' }}</div>
+    <div><strong>Расположение:</strong> {{ school.location|default:'—' }}</div>
+  </div>
+</div>
+
+<div class="d-flex gap-2">
+  <a class="btn btn-outline-primary" href="{% url 'school_admin:profile_edit' %}">Редактировать пользователя</a>
+  <a class="btn btn-outline-secondary" href="{% url 'school_admin:password_change' %}">Изменить пароль</a>
+</div>
+{% endblock %}
