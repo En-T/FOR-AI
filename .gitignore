@@ -69,6 +69,7 @@ media/
 
 # Logs
 logs/*.log
+!logs/.gitkeep
 
 # Django migration files
 **/migrations/**

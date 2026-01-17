@@ -104,15 +104,21 @@ LOGGING = {
             'filename': BASE_DIR / 'logs' / 'app.log',
             'formatter': 'verbose',
         },
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'errors.log',
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['file', 'error_file'],
             'level': 'INFO',
             'propagate': True,
         },
         'schools': {
-            'handlers': ['file'],
+            'handlers': ['file', 'error_file'],
             'level': 'INFO',
             'propagate': False,
         },

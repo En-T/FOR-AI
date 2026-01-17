@@ -1,5 +1,55 @@
 # School Management System - Backend Implementation
 
+## Quick Start
+
+### Prerequisites
+- Python 3.10+
+- pip (Python package manager)
+
+### Installation
+
+1. **Clone the repository**
+```bash
+cd school_management
+```
+
+2. **Create and activate virtual environment**
+```bash
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+# or
+venv\Scripts\activate  # Windows
+```
+
+3. **Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+4. **Run migrations**
+```bash
+python manage.py migrate
+```
+
+5. **Create superuser** (optional if not created yet)
+```bash
+python manage.py createsuperuser
+```
+
+**Default superuser credentials:**
+- Email: admin@school.local
+- Password: admin
+
+6. **Run development server**
+```bash
+python manage.py runserver
+```
+
+7. **Access admin panel**
+```
+http://127.0.0.1:8000/admin/
+```
+
 ## Overview
 
 Complete backend implementation for a multi-role school management system built with Django 4.x. The system supports three user roles: Superuser, Education Department, and School Administrator with comprehensive CRUD operations and business logic.

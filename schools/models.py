@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models import Q, Avg
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
 import logging
 
@@ -268,8 +269,8 @@ class Grade(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name=_('предмет'), related_name='grades')
     quarter = models.CharField(_('четверть'), max_length=20, choices=QUARTER_CHOICES)
     grade = models.IntegerField(_('оценка'), null=True, blank=True, validators=[
-        models.MinValueValidator(1),
-        models.MaxValueValidator(10)
+        MinValueValidator(1),
+        MaxValueValidator(10)
     ])
     created_at = models.DateTimeField(_('дата создания'), auto_now_add=True)
     updated_at = models.DateTimeField(_('дата обновления'), auto_now=True)
