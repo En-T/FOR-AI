@@ -1,0 +1,70 @@
+{% extends 'schools/base.html' %}
+{% load static %}
+
+{% block page_title %}Распределение учащихся по подгруппам{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Предмет: {{ assignment.subject.name }} | Учитель: {{ assignment.teacher.get_full_name }}
+    </div>
+    <div class="card-body">
+        <p class="text-muted mb-4">Выберите учащихся слева и переместите их в группу справа.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="transfer-box-container mb-4">
+                <!-- Нераспределенные -->
+                <div class="transfer-box-column flex-grow-1">
+                    <h6 class="text-center">Нераспределенные</h6>
+                    <div class="transfer-box-list list-unassigned">
+                        {% for student in unassigned_students %}
+                        <div class="transfer-box-item" data-id="{{ student.pk }}">
+                            {{ student.get_full_name }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Кнопки управления -->
+                <div class="transfer-box-controls">
+                    <button type="button" class="btn btn-outline-primary btn-move-right">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary btn-move-left">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                </div>
+                
+                <!-- Группы -->
+                <div class="transfer-box-column flex-grow-1">
+                    <h6 class="text-center">Подгруппа учителя</h6>
+                    <div class="mb-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="target-group" id="group0" value="0" checked>
+                            <label class="form-check-label" for="group0">Группа 1</label>
+                        </div>
+                    </div>
+                    <div class="transfer-box-list list-group">
+                        {% for student in assigned_students %}
+                        <div class="transfer-box-item" data-id="{{ student.pk }}">
+                            {{ student.get_full_name }}
+                            <input type="hidden" name="student_{{ student.pk }}_group" value="0">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{% url 'schools:school_admin-class-detail' assignment.school_class.pk %}" class="btn btn-outline-secondary">Отмена</a>
+                <button type="submit" class="btn btn-primary">Сохранить распределение</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/transfer-box.js' %}"></script>
+{% endblock %}

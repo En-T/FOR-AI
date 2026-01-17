@@ -858,9 +858,15 @@ class GradeJournalView(SchoolAdminRequiredMixin, FormView):
         
         subject_assignments = ClassSubjectGroup.objects.filter(
             class_group=class_group
-        ).select_related('subject').distinct('subject')
+        ).select_related('subject')
         
-        subjects = [sa.subject for sa in subject_assignments]
+        # Get unique subjects
+        subjects_seen = set()
+        subjects = []
+        for sa in subject_assignments:
+            if sa.subject_id not in subjects_seen:
+                subjects.append(sa.subject)
+                subjects_seen.add(sa.subject_id)
         
         grades_data = {}
         grades = Grade.objects.filter(
@@ -876,6 +882,43 @@ class GradeJournalView(SchoolAdminRequiredMixin, FormView):
         kwargs['subjects'] = subjects
         kwargs['grades_data'] = grades_data
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        class_id = self.kwargs['class_id']
+        class_group = get_object_or_404(ClassGroup, id=class_id)
+        context['school_class'] = class_group
+        
+        students = class_group.students.all()
+        context['students'] = students
+        
+        subject_assignments = ClassSubjectGroup.objects.filter(
+            class_group=class_group
+        ).select_related('subject')
+        
+        subjects_seen = set()
+        subjects = []
+        for sa in subject_assignments:
+            if sa.subject_id not in subjects_seen:
+                subjects.append(sa.subject)
+                subjects_seen.add(sa.subject_id)
+        context['subjects'] = subjects
+        
+        # Organize grades for template
+        grades_dict = {}
+        grades = Grade.objects.filter(student__in=students, subject__in=subjects)
+        for g in grades:
+            if g.student_id not in grades_dict:
+                grades_dict[g.student_id] = {}
+            if g.subject_id not in grades_dict[g.student_id]:
+                grades_dict[g.student_id][g.subject_id] = {}
+            
+            # Map database quarter codes to template keys
+            q_map = {'q1': 'q1', 'q2': 'q2', 'q3': 'q3', 'q4': 'q4', 'exam': 'exam', 'year': 'year', 'final': 'final'}
+            grades_dict[g.student_id][g.subject_id][q_map.get(g.quarter)] = g.grade
+            
+        context['grades'] = grades_dict
+        return context
     
     def post(self, request, *args, **kwargs):
         class_id = self.kwargs['class_id']

@@ -1,0 +1,82 @@
+{% extends 'schools/base.html' %}
+{% load static %}
+{% load school_extras %}
+
+{% block page_title %}Журнал оценок: {{ school_class.name }}{% endblock %}
+
+{% block page_actions %}
+<button id="export-csv" class="btn btn-sm btn-outline-secondary"><i class="bi bi-download me-1"></i> Экспорт в CSV</button>
+<button type="submit" form="journal-form" class="btn btn-sm btn-primary">Сохранить всё</button>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body p-0">
+        <form id="journal-form" method="post">
+            {% csrf_token %}
+            <div class="table-responsive">
+                <table class="table table-bordered grade-journal-table mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th rowspan="2" class="sticky-column bg-light" style="min-width: 200px;">ФИО учащегося</th>
+                            {% for subject in subjects %}
+                            <th colspan="7" class="text-center">{{ subject.name }}</th>
+                            {% endfor %}
+                            <th rowspan="2" class="text-center">Средний балл</th>
+                        </tr>
+                        <tr>
+                            {% for subject in subjects %}
+                            <th class="small p-1 text-center">I</th>
+                            <th class="small p-1 text-center">II</th>
+                            <th class="small p-1 text-center">III</th>
+                            <th class="small p-1 text-center">IV</th>
+                            <th class="small p-1 text-center">Экз</th>
+                            <th class="small p-1 text-center">Год</th>
+                            <th class="small p-1 text-center">Итг</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td class="sticky-column bg-white"><strong>{{ student.get_full_name }}</strong></td>
+                            {% for subject in subjects %}
+                                {% with student_grades=grades|get_item:student.pk|get_item:subject.pk %}
+                                <td class="p-0"><input type="text" name="grade_{{ student.pk }}_{{ subject.pk }}_q1" class="grade-input form-control form-control-sm border-0 rounded-0" value="{{ student_grades.q1|default:'' }}"></td>
+                                <td class="p-0"><input type="text" name="grade_{{ student.pk }}_{{ subject.pk }}_q2" class="grade-input form-control form-control-sm border-0 rounded-0" value="{{ student_grades.q2|default:'' }}"></td>
+                                <td class="p-0"><input type="text" name="grade_{{ student.pk }}_{{ subject.pk }}_q3" class="grade-input form-control form-control-sm border-0 rounded-0" value="{{ student_grades.q3|default:'' }}"></td>
+                                <td class="p-0"><input type="text" name="grade_{{ student.pk }}_{{ subject.pk }}_q4" class="grade-input form-control form-control-sm border-0 rounded-0" value="{{ student_grades.q4|default:'' }}"></td>
+                                <td class="p-0"><input type="text" name="grade_{{ student.pk }}_{{ subject.pk }}_exam" class="grade-input form-control form-control-sm border-0 rounded-0" value="{{ student_grades.exam|default:'' }}"></td>
+                                <td class="p-0"><input type="text" name="grade_{{ student.pk }}_{{ subject.pk }}_year" class="grade-input form-control form-control-sm border-0 rounded-0" value="{{ student_grades.year|default:'' }}"></td>
+                                <td class="p-0"><input type="text" name="grade_{{ student.pk }}_{{ subject.pk }}_final" class="grade-input form-control form-control-sm border-0 rounded-0" value="{{ student_grades.final|default:'' }}"></td>
+                                {% endwith %}
+                            {% endfor %}
+                            <td class="average-cell text-center fw-bold">{{ student.avg_grade|floatformat:2|default:"-" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.sticky-column {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    border-right: 2px solid #dee2e6 !important;
+}
+.grade-input:focus {
+    background-color: #fff3cd;
+    box-shadow: none;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/grade-journal.js' %}"></script>
+{% endblock %}

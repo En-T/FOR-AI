@@ -1,0 +1,64 @@
+{% extends 'schools/base.html' %}
+
+{% block page_title %}Школы{% endblock %}
+
+{% block page_actions %}
+<a href="{% url 'schools:education_dept-school-create' %}" class="btn btn-sm btn-outline-primary">
+    <i class="bi bi-plus-lg me-1"></i> Добавить школу
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="get" class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Поиск по названию..." value="{{ request.GET.q }}">
+                    <button class="btn btn-primary" type="submit">Найти</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Директор</th>
+                        <th>Выпускной класс</th>
+                        <th>Расположение</th>
+                        <th>Кол-во классов</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for school in schools %}
+                    <tr>
+                        <td><strong>{{ school.name }}</strong></td>
+                        <td>{{ school.director_name }}</td>
+                        <td>{{ school.get_graduation_class_display }}</td>
+                        <td>{{ school.location }}</td>
+                        <td>{{ school.classes.count }}</td>
+                        <td>
+                            <a href="{% url 'schools:education_dept-school-detail' school.pk %}" class="btn btn-sm btn-outline-info" title="Просмотр"><i class="bi bi-eye"></i></a>
+                            <a href="{% url 'schools:education_dept-school-update' school.pk %}" class="btn btn-sm btn-outline-primary" title="Редактировать"><i class="bi bi-pencil"></i></a>
+                            <form action="{% url 'schools:education_dept-school-delete' school.pk %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger btn-confirm-delete" title="Удалить"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">Школы не найдены</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% include 'schools/pagination.html' %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'schools/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}{% if object %}Редактирование{% else %}Добавление{% endif %} предмета{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                        <a href="{% url 'schools:education_dept-subject-list' %}" class="btn btn-outline-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

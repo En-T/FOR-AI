@@ -1,0 +1,29 @@
+{% extends 'schools/base.html' %}
+
+{% block page_title %}Детали пользователя{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">Профиль пользователя</div>
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ object.username }}</p>
+                <p><strong>Email:</strong> {{ object.email }}</p>
+                <p><strong>Имя:</strong> {{ object.first_name }}</p>
+                <p><strong>Фамилия:</strong> {{ object.last_name }}</p>
+                <p><strong>Роль:</strong> {{ object.get_role_display }}</p>
+                {% if object.school %}
+                <p><strong>Школа:</strong> {{ object.school.name }}</p>
+                {% endif %}
+                <hr>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'schools:education_dept-user-update' object.pk %}" class="btn btn-primary">Редактировать</a>
+                    <a href="{% url 'schools:education_dept-user-change-password' object.pk %}" class="btn btn-warning">Изменить пароль</a>
+                    <a href="{% url 'schools:education_dept-user-list' %}" class="btn btn-outline-secondary">К списку</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
