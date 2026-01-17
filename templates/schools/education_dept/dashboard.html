@@ -1,0 +1,67 @@
+{% extends 'schools/base.html' %}
+
+{% block page_title %}Панель управления Отдела Образования{% endblock %}
+
+{% block content %}
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+    {% for school in schools %}
+    {% with stats=school.get_statistics %}
+    <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="card-title text-primary">{{ school.name }}</h5>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Классов:</span>
+                        <span class="fw-bold">{{ stats.class_count }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Учащихся:</span>
+                        <span class="fw-bold">{{ stats.student_count }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Средний балл:</span>
+                        <span class="badge bg-success">{{ stats.average_grade|floatformat:2|default:"-" }}</span>
+                    </div>
+                </div>
+                <a href="{% url 'schools:education_dept-school-detail' school.pk %}" class="btn btn-sm btn-primary w-100">Подробнее</a>
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Распределение учащихся по школам</div>
+            <div class="card-body">
+                <canvas id="studentsChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Средний балл по школам</div>
+            <div class="card-body">
+                <canvas id="gradesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/charts.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const schoolNames = [{% for s in schools %}"{{ s.name }}",{% endfor %}];
+    const studentCounts = [{% for s in schools %}{{ s.get_statistics.student_count|default:0 }},{% endfor %}];
+    const avgGrades = [{% for s in schools %}{{ s.get_statistics.average_grade|default:0 }},{% endfor %}];
+
+    Charts.drawChart('studentsChart', 'pie', schoolNames, studentCounts, 'Количество учащихся');
+    Charts.drawChart('gradesChart', 'bar', schoolNames, avgGrades, 'Средний балл');
+});
+</script>
+{% endblock %}

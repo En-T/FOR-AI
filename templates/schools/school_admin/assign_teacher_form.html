@@ -1,0 +1,50 @@
+{% extends 'schools/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}Назначение учителя на предмет{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    
+                    <div id="subgroup-warning" class="alert alert-warning d-none">
+                        Этот предмет уже ведет другой учитель в данном классе. 
+                        Вы можете добавить второго учителя для разделения на подгруппы.
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                        <a href="{% url 'schools:school_admin-teacher-list' %}" class="btn btn-outline-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Simple logic to show warning if multiple teachers might be assigned
+document.addEventListener('DOMContentLoaded', function() {
+    const classSelect = document.querySelector('select[name="school_class"]');
+    const subjectSelect = document.querySelector('select[name="subject"]');
+    const warning = document.querySelector('#subgroup-warning');
+    
+    function checkAssignments() {
+        if (classSelect.value && subjectSelect.value) {
+            // In a real app, we might do an AJAX call here
+            // For now, we'll just simulate or leave it to server-side validation
+        }
+    }
+    
+    if(classSelect) classSelect.addEventListener('change', checkAssignments);
+    if(subjectSelect) subjectSelect.addEventListener('change', checkAssignments);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'schools/base.html' %}
+
+{% block page_title %}Мой профиль{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">Информация о пользователе</div>
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Имя:</strong> {{ user.first_name }}</p>
+                <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
+                <hr>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'schools:school_admin-profile-update' %}" class="btn btn-primary">Редактировать профиль</a>
+                    <a href="{% url 'schools:school_admin-change-password' %}" class="btn btn-outline-secondary">Изменить пароль</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">Информация о школе</div>
+            <div class="card-body">
+                {% if user.school %}
+                <h4 class="card-title">{{ user.school.name }}</h4>
+                <p><strong>Директор:</strong> {{ user.school.director_name }}</p>
+                <p><strong>Выпускной класс:</strong> {{ user.school.get_graduation_class_display }}</p>
+                <p><strong>Расположение:</strong> {{ user.school.location }}</p>
+                <hr>
+                <a href="{% url 'schools:education_dept-school-update' %}" class="btn btn-outline-primary">Редактировать школу</a>
+                {% else %}
+                <p class="text-danger">Школа не назначена</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

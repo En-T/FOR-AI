@@ -1,0 +1,69 @@
+<ul class="nav flex-column">
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="/">
+      <i class="bi bi-house-door me-2"></i>
+      Главная
+    </a>
+  </li>
+
+  {% if user.role == 'superuser' %}
+  <li class="nav-item">
+    <a class="nav-link {% if 'user' in request.path %}active{% endif %}" href="{% url 'schools:superuser-user-list' %}">
+      <i class="bi bi-people me-2"></i>
+      Пользователи
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if 'logs' in request.path %}active{% endif %}" href="{% url 'schools:superuser-logs' %}">
+      <i class="bi bi-journal-text me-2"></i>
+      Логи
+    </a>
+  </li>
+
+  {% elif user.role == 'education_dept' %}
+  <li class="nav-item">
+    <a class="nav-link {% if 'school' in request.path and 'list' in request.path %}active{% endif %}" href="{% url 'schools:education_dept-school-list' %}">
+      <i class="bi bi-building me-2"></i>
+      Школы
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if 'user' in request.path %}active{% endif %}" href="{% url 'schools:education_dept-user-list' %}">
+      <i class="bi bi-people me-2"></i>
+      Пользователи
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if 'subject' in request.path %}active{% endif %}" href="{% url 'schools:education_dept-subject-list' %}">
+      <i class="bi bi-book me-2"></i>
+      Предметы
+    </a>
+  </li>
+
+  {% elif user.role == 'school_admin' %}
+  <li class="nav-item">
+    <a class="nav-link {% if 'class' in request.path %}active{% endif %}" href="{% url 'schools:school_admin-class-list' %}">
+      <i class="bi bi-mortarboard me-2"></i>
+      Классы
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if 'student' in request.path %}active{% endif %}" href="{% url 'schools:school_admin-student-list' %}">
+      <i class="bi bi-person me-2"></i>
+      Учащиеся
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if 'teacher' in request.path %}active{% endif %}" href="{% url 'schools:school_admin-teacher-list' %}">
+      <i class="bi bi-person-badge me-2"></i>
+      Учителя
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if 'profile' in request.path %}active{% endif %}" href="{% url 'schools:school_admin-profile' %}">
+      <i class="bi bi-person-circle me-2"></i>
+      Профиль
+    </a>
+  </li>
+  {% endif %}
+</ul>

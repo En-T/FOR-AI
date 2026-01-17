@@ -1,0 +1,71 @@
+{% extends 'schools/base.html' %}
+
+{% block page_title %}Карточка учащегося{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">Личные данные</div>
+            <div class="card-body">
+                <h4>{{ student.get_full_name }}</h4>
+                <p><strong>Класс:</strong> {{ student.school_class.name }}</p>
+                <p><strong>Средний балл:</strong> {{ student.avg_grade|floatformat:2|default:"-" }}</p>
+                <hr>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'schools:school_admin-student-update' student.pk %}" class="btn btn-primary">Редактировать</a>
+                    <form action="{% url 'schools:school_admin-student-delete' student.pk %}" method="post" class="d-grid">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-confirm-delete">Удалить</button>
+                    </form>
+                    <a href="{% url 'schools:school_admin-class-detail' student.school_class.pk %}" class="btn btn-outline-secondary">К классу</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">Оценки по четвертям</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm text-center align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-start">Предмет</th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>Экз</th>
+                                <th>Год</th>
+                                <th>Итг</th>
+                                <th>Средний</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for subject_data in grades_by_subject %}
+                            <tr>
+                                <td class="text-start">{{ subject_data.subject.name }}</td>
+                                <td class="{% if subject_data.q1 <= 2 %}text-danger fw-bold{% endif %}">{{ subject_data.q1|default:"-" }}</td>
+                                <td class="{% if subject_data.q2 <= 2 %}text-danger fw-bold{% endif %}">{{ subject_data.q2|default:"-" }}</td>
+                                <td class="{% if subject_data.q3 <= 2 %}text-danger fw-bold{% endif %}">{{ subject_data.q3|default:"-" }}</td>
+                                <td class="{% if subject_data.q4 <= 2 %}text-danger fw-bold{% endif %}">{{ subject_data.q4|default:"-" }}</td>
+                                <td class="{% if subject_data.exam <= 2 %}text-danger fw-bold{% endif %}">{{ subject_data.exam|default:"-" }}</td>
+                                <td class="{% if subject_data.year <= 2 %}text-danger fw-bold{% endif %}">{{ subject_data.year|default:"-" }}</td>
+                                <td class="{% if subject_data.final <= 2 %}text-danger fw-bold{% endif %}">{{ subject_data.final|default:"-" }}</td>
+                                <td class="fw-bold">{{ subject_data.avg|floatformat:2|default:"-" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="9" class="text-center">Оценки отсутствуют</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

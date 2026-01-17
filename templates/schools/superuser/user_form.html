@@ -1,0 +1,44 @@
+{% extends 'schools/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}{% if object %}Редактирование{% else %}Создание{% endif %} пользователя{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form.username|as_crispy_field }}
+                    {{ form.email|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.first_name|as_crispy_field }}
+                    {{ form.last_name|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form.role|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.school|as_crispy_field }}
+                </div>
+            </div>
+            {% if not object %}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form.password|as_crispy_field }}
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="{% url 'schools:superuser-user-list' %}" class="btn btn-outline-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
